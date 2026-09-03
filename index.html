@@ -5,14 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Nuestra boda · 21 de noviembre de 2026</title>
 <meta name="description" content="Invitación a nuestra boda. 21 de noviembre de 2026, Iglesia Apostólica de Jesucristo, Bogotá." />
-<meta name="theme-color" content="#FAF5EC" />
+<meta name="theme-color" content="#140E16" />
 
 <!-- ============================================================
-     ARCHIVOS QUE DEBEN QUEDAR EN LA MISMA CARPETA QUE ESTE index.html
-       · foto_boda.jpeg   (imagen de la portada)
-       · musica.mp3       (audio de fondo, se corta en 1:35)
-     Las flores NO son imágenes: están dibujadas en SVG dentro de
-     este mismo archivo, así que no hay nada más que subir.
+     ARCHIVOS QUE VAN EN LA MISMA CARPETA QUE ESTE index.html
+       · foto_boda.jpeg   imagen de la portada
+       · musica.mp3       audio de fondo (suena de 1:00 a 1:35)
+       · boda.ics         evento para Calendario de Apple
+
+     Las flores están dibujadas en SVG dentro de este archivo:
+     calas vinotinto, orquídeas cymbidium burdeos, anturios verdes,
+     amaranto colgante, hortensia verde y hoja de monstera.
      ============================================================ -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -21,275 +24,231 @@
 
 <style>
 /* ============================================================
-   1. TOKENS DE DISEÑO
-   Paleta tomada de las referencias: papel marfil, vino profundo,
-   rosa antiguo, verde salvia y un dorado apagado para las líneas.
+   1. TOKENS
    ============================================================ */
 :root{
-  --marfil:      #FAF5EC;
-  --marfil-alto: #FFFDF8;
-  --vino:        #7B1E33;
-  --vino-oscuro: #5C1526;
-  --vino-claro:  #A63A50;
-  --rosa-viejo:  #C98495;
-  --salvia:      #7E9070;
-  --salvia-clara:#A8B99A;
-  --oro:         #B08D4F;
-  --oro-claro:   #E3D3B0;
-  --tinta:       #3A2C2A;
-  --tinta-suave: #7A6863;
+  --noche:       #140E16;
+  --noche-suave: #221829;
+  --panel:       #F4EEE1;
+  --panel-alto:  #FBF6EC;
+
+  --vino:        #6B0F2E;
+  --vino-claro:  #97183F;
+  --vino-oscuro: #3C0718;
+  --vino-luz:    #C0416B;
+  --vino-petalo: #A8214A;
+
+  --lima:        #A9C24A;
+  --lima-clara:  #CBDE79;
+  --verde:       #6E8B3D;
+  --verde-hondo: #3F5622;
+
+  --crema:       #EFD9B6;
+  --oro:         #BE9C5E;
+
+  --tinta:       #2B1F26;
+  --tinta-suave: #766670;
 
   --serif:  "Cormorant Garamond", Georgia, "Times New Roman", serif;
   --script: "Great Vibes", "Cormorant Garamond", cursive;
 
-  /* Escala tipográfica fluida (mobile-first) */
   --t-xs: clamp(.66rem, .62rem + .2vw, .74rem);
   --t-sm: clamp(.84rem, .80rem + .25vw, .94rem);
   --t-md: clamp(1rem, .94rem + .4vw, 1.14rem);
-  --t-lg: clamp(1.5rem, 1.3rem + 1.1vw, 1.95rem);
-  --t-xl: clamp(2.2rem, 1.8rem + 2.4vw, 2.9rem);
+  --t-lg: clamp(1.45rem, 1.25rem + 1.1vw, 1.9rem);
+  --t-xl: clamp(2.1rem, 1.7rem + 2.4vw, 2.8rem);
 
-  --transicion: 620ms cubic-bezier(.22,.61,.36,1);
+  /* Curva con un leve rebote al final: da la sensación "viva" */
+  --curva: cubic-bezier(.16,.84,.28,1.02);
 }
 
 *, *::before, *::after{ box-sizing: border-box; }
 
 html, body{
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  /* CERO SCROLL: ni vertical ni horizontal */
+  height: 100%; width: 100%; margin: 0;
   overflow: hidden;
   overscroll-behavior: none;
   touch-action: manipulation;
 }
 
 body{
-  /* Fondo del escritorio: la tarjeta reposa sobre él */
-  background: #EDE4D6;
+  background: #090610;
   color: var(--tinta);
   font-family: var(--serif);
   font-weight: 300;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
 }
 
-:focus-visible{
-  outline: 2px solid var(--vino);
-  outline-offset: 3px;
-  border-radius: 2px;
-}
+:focus-visible{ outline: 2px solid var(--lima); outline-offset: 3px; border-radius: 2px; }
 
 /* ============================================================
-   2. ESCENARIO Y VISTAS
-   Cada paso ocupa la pantalla completa y se superpone al anterior.
+   2. TARJETA
    ============================================================ */
 .escenario{
   position: relative;
-
-  /* En móvil ocupa toda la pantalla.
-     En portátil y escritorio se limita al formato de una tarjeta
-     vertical, así la foto no se estira a todo el monitor. */
   width:  min(100vw, 430px);
-  height: min(100dvh, 760px);
-
+  height: min(100dvh, 780px);
   overflow: hidden;
-  /* textura de papel muy sutil */
-  background:
-    radial-gradient(circle at 30% 20%, rgba(255,255,255,.6), transparent 60%),
-    var(--marfil);
+  background: radial-gradient(120% 85% at 50% 0%, var(--noche-suave), var(--noche) 62%);
+  perspective: 1300px;            /* habilita la profundidad de las transiciones */
+  perspective-origin: 50% 45%;
 }
 
-/* La tarjeta se despega del fondo solo cuando sobra espacio alrededor */
-@media (min-width: 700px) and (min-height: 700px){
-  .escenario{ box-shadow: 0 18px 60px rgba(58,44,42,.28); }
+@media (min-width: 700px) and (min-height: 720px){
+  .escenario{ box-shadow: 0 26px 80px rgba(0,0,0,.6); }
 }
 
+/* ============================================================
+   3. PASOS · TRANSICIÓN CON PROFUNDIDAD
+   El paso entrante llega girando levemente sobre su eje vertical,
+   desenfocado, y aterriza en el plano. El saliente se aleja.
+   ============================================================ */
 .paso{
   position: absolute;
   inset: 0;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(.9rem, 2.6vh, 1.9rem);
-  padding: calc(env(safe-area-inset-top) + 3rem) clamp(1.5rem, 8%, 2.6rem) calc(env(safe-area-inset-bottom) + 3.2rem);
-  text-align: center;
+  padding: clamp(30px, 8%, 46px) clamp(22px, 6.5%, 34px);
+  z-index: 2;
+  transform-style: preserve-3d;
+  will-change: transform, opacity, filter;
 
   opacity: 0;
   visibility: hidden;
-  transform: translateY(18px);
-  transition: opacity var(--transicion), transform var(--transicion), visibility 0s linear var(--transicion);
+  transform:
+    translate3d(var(--x, 60px), 0, -120px)
+    rotateY(var(--giro, 14deg))
+    scale(.94);
+  filter: blur(7px);
+  transition:
+    opacity 480ms var(--curva),
+    transform 720ms var(--curva),
+    filter 520ms ease,
+    visibility 0s linear 720ms;
   pointer-events: none;
-
-  /* Nada se desplaza: el contenido se ajusta con la escala fluida
-     y con las reglas de pantallas bajas del final de la hoja. */
-  overflow: hidden;
 }
 
 .paso.activo{
   opacity: 1;
   visibility: visible;
-  transform: none;
+  transform: translate3d(0,0,0) rotateY(0) scale(1);
+  filter: blur(0);
   pointer-events: auto;
-  transition: opacity var(--transicion), transform var(--transicion), visibility 0s;
+  transition:
+    opacity 480ms var(--curva),
+    transform 720ms var(--curva),
+    filter 520ms ease,
+    visibility 0s;
 }
 
-.paso.saliendo{ transform: translateY(-18px); }
-
-/* Marco dorado interior, como el filo impreso de una tarjeta */
-.marco{
-  position: absolute;
-  inset: clamp(10px, 3vw, 22px);
-  border: 1px solid var(--oro-claro);
-  pointer-events: none;
-  z-index: 3;
+.paso.saliendo{
+  transform:
+    translate3d(var(--x-out, -60px), 0, -180px)
+    rotateY(var(--giro-out, -14deg))
+    scale(.92);
+  filter: blur(9px);
 }
 
-.marco::after{
+/* ---- Panel de papel ---- */
+.panel{
+  position: relative;
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: clamp(.5rem, 2vh, 1.1rem);
+  padding: clamp(1.1rem, 4.5%, 1.9rem) clamp(1rem, 5%, 1.7rem);
+  text-align: center;
+  overflow: hidden;
+  background: var(--panel);
+  box-shadow: 0 14px 40px rgba(0,0,0,.55);
+}
+
+.panel::after{
   content: "";
-  position: absolute;
-  inset: 5px;
-  border: 1px solid rgba(176,141,79,.28);
-}
-
-/* ============================================================
-   3. ORNAMENTOS FLORALES
-   Ramos en SVG en las esquinas opuestas, igual que en una
-   tarjeta impresa. No capturan clics.
-   ============================================================ */
-.ramo{
-  position: absolute;
-  width: clamp(130px, 42%, 200px);   /* proporcional a la tarjeta */
-  height: auto;
+  position: absolute; inset: 9px;
+  border: 1px solid rgba(190,156,94,.4);
   pointer-events: none;
-  z-index: 2;
 }
 
-.ramo--sup{ top: -6%;    left: -9%; }
-.ramo--inf{ bottom: -6%; right: -9%; transform: rotate(180deg); }
+/* Entrada escalonada, con desenfoque que se despeja */
+.paso.activo .panel > *{ animation: aterrizar 760ms var(--curva) both; }
+.paso.activo .panel > *:nth-child(1){ animation-delay: 140ms; }
+.paso.activo .panel > *:nth-child(2){ animation-delay: 205ms; }
+.paso.activo .panel > *:nth-child(3){ animation-delay: 270ms; }
+.paso.activo .panel > *:nth-child(4){ animation-delay: 335ms; }
+.paso.activo .panel > *:nth-child(5){ animation-delay: 400ms; }
+.paso.activo .panel > *:nth-child(6){ animation-delay: 465ms; }
+.paso.activo .panel > *:nth-child(7){ animation-delay: 530ms; }
 
-/* En la portada las flores van sobre la foto y se refuerzan un poco */
-.portada .ramo{ filter: drop-shadow(0 2px 10px rgba(40,20,25,.35)); }
+@keyframes aterrizar{
+  from{ opacity: 0; transform: translateY(18px) scale(.97); filter: blur(5px); }
+  to  { opacity: 1; transform: none; filter: blur(0); }
+}
 
 /* ============================================================
    4. PORTADA
    ============================================================ */
-.portada{
-  background-color: #40222b;
+.panel--foto{
+  justify-content: flex-end;
+  color: var(--panel-alto);
+  background-color: #2A1620;
   background-image:
-    linear-gradient(180deg, rgba(45,22,29,.62) 0%, rgba(45,22,29,.34) 42%, rgba(45,22,29,.80) 100%),
+    linear-gradient(180deg, rgba(20,14,22,.55) 0%, rgba(20,14,22,.22) 36%, rgba(20,14,22,.9) 100%),
     url("foto_boda.jpeg");
   background-size: cover;
-  background-position: center;
-  color: #FFF8EE;
-  justify-content: flex-end;
+  background-position: center 30%;
 }
-
-.portada .marco{ border-color: rgba(255,248,238,.45); }
-.portada .marco::after{ border-color: rgba(255,248,238,.22); }
+.panel--foto::after{ border-color: rgba(244,238,225,.32); }
 
 .portada__script{
   font-family: var(--script);
-  font-size: var(--t-xl);
-  line-height: 1;
-  margin: 0;
-  color: #FFF1E2;
-  text-shadow: 0 2px 16px rgba(0,0,0,.4);
+  font-size: var(--t-xl); line-height: 1; margin: 0;
+  color: var(--panel-alto);
+  text-shadow: 0 2px 18px rgba(0,0,0,.6);
 }
 
 .portada__frase{
-  font-size: var(--t-md);
-  font-style: italic;
-  line-height: 1.7;
-  max-width: 30ch;
-  margin: 0 auto;
-  color: #FFF8EE;
-  text-shadow: 0 1px 14px rgba(0,0,0,.4);
+  font-size: var(--t-md); font-style: italic; line-height: 1.7;
+  max-width: 28ch; margin: 0; color: var(--panel-alto);
+  text-shadow: 0 1px 14px rgba(0,0,0,.65);
 }
 
 .portada__fecha{
-  font-size: var(--t-sm);
-  letter-spacing: .38em;
-  margin: 0;
-  color: rgba(255,241,226,.9);
+  font-size: var(--t-sm); letter-spacing: .4em; margin: 0;
+  color: rgba(244,238,225,.88);
 }
 
 /* ============================================================
-   5. ELEMENTOS COMPARTIDOS
+   5. TIPOGRAFÍA
    ============================================================ */
-.filete{
-  display: flex;
-  align-items: center;
-  gap: .55rem;
-  color: var(--oro);
-}
-
-.filete::before, .filete::after{
-  content: "";
-  width: 42px;
-  height: 1px;
-  background: currentColor;
-  opacity: .65;
-}
-
-.filete svg{ width: 13px; height: 13px; }
-
-.portada .filete{ color: rgba(255,241,226,.8); }
-
 .titulo{
-  font-family: var(--script);
-  font-size: var(--t-lg);
-  font-weight: 400;
-  line-height: 1.25;
-  margin: 0;
-  color: var(--vino);
+  font-family: var(--script); font-size: var(--t-lg);
+  font-weight: 400; line-height: 1.25; margin: 0; color: var(--vino);
 }
 
-.texto{
-  font-size: var(--t-md);
-  line-height: 1.75;
-  max-width: 33ch;
-  margin: 0 auto;
-  color: var(--tinta);
+.filete{ display: flex; align-items: center; gap: .5rem; color: var(--oro); }
+.filete::before, .filete::after{
+  content: ""; width: 38px; height: 1px; background: currentColor; opacity: .7;
 }
+.filete svg{ width: 12px; height: 12px; }
+.panel--foto .filete{ color: rgba(244,238,225,.75); }
 
+.texto{ font-size: var(--t-md); line-height: 1.65; max-width: 30ch; margin: 0; }
 .texto--tenue{ color: var(--tinta-suave); font-style: italic; }
 
-.dato{ display: flex; flex-direction: column; gap: .2rem; }
-
-.dato__valor{
-  font-size: var(--t-md);
-  line-height: 1.45;
-  color: var(--tinta);
-}
-
+.dato{ display: flex; flex-direction: column; gap: .18rem; }
+.dato__valor{ font-size: var(--t-md); line-height: 1.4; }
 .dato__valor--grande{
-  font-size: var(--t-lg);
-  font-family: var(--serif);
-  font-weight: 500;
-  line-height: 1.25;
-  color: var(--vino);
+  font-size: var(--t-lg); font-weight: 500; line-height: 1.2; color: var(--vino);
 }
-
-.dato__nota{
-  font-size: var(--t-xs);
-  letter-spacing: .24em;
-  color: var(--tinta-suave);
-}
+.dato__nota{ font-size: var(--t-xs); letter-spacing: .24em; color: var(--tinta-suave); }
 
 .nota{
-  max-width: 33ch;
-  margin: 0 auto;
-  padding: .95rem 1.15rem;
-  border: 1px solid var(--oro-claro);
-  background: var(--marfil-alto);
-  font-size: var(--t-sm);
-  line-height: 1.65;
+  max-width: 31ch; margin: 0; padding: .7rem .9rem;
+  border-left: 2px solid var(--lima);
+  background: var(--panel-alto);
+  font-size: var(--t-sm); line-height: 1.55; text-align: left;
   color: var(--tinta-suave);
 }
 
@@ -297,359 +256,626 @@ body{
    6. BOTONES
    ============================================================ */
 .boton{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 48px;
-  padding: .8rem 2.2rem;
-  font-family: var(--serif);
-  font-size: var(--t-sm);
-  font-weight: 500;
-  letter-spacing: .2em;
-  text-decoration: none;
-  color: var(--vino);
-  background: transparent;
-  border: 1px solid var(--vino);
-  border-radius: 999px;
+  position: relative; overflow: hidden;
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+  min-height: 44px; padding: .7rem 1.9rem;
+  font-family: var(--serif); font-size: var(--t-sm); font-weight: 500;
+  letter-spacing: .18em; text-decoration: none;
+  color: var(--vino); background: transparent;
+  border: 1px solid var(--vino); border-radius: 999px;
   cursor: pointer;
-  transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease;
+  transition: background-color 300ms ease, color 300ms ease,
+              border-color 300ms ease, transform 220ms var(--curva),
+              box-shadow 300ms ease;
 }
+.boton:hover{
+  background: var(--vino); color: var(--panel);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(107,15,46,.35);
+}
+.boton:active{ transform: scale(.96) translateY(0); }
 
-.boton:hover{ background: var(--vino); color: #FFF8EE; }
+/* Destello que cruza el botón al pasar el cursor */
+.boton::before{
+  content: ""; position: absolute; top: 0; left: -60%;
+  width: 45%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.35), transparent);
+  transform: skewX(-18deg);
+  transition: left 650ms ease;
+}
+.boton:hover::before{ left: 120%; }
 
-.boton--claro{ color: #FFF8EE; border-color: rgba(255,248,238,.75); }
-.boton--claro:hover{ background: #FFF8EE; color: var(--vino); }
+.boton--claro{ color: var(--panel-alto); border-color: rgba(244,238,225,.75); }
+.boton--claro:hover{ background: var(--panel-alto); color: var(--vino); }
 
-.boton--solido{ background: var(--vino); color: #FFF8EE; }
+.boton--solido{ background: var(--vino); color: var(--panel); }
 .boton--solido:hover{ background: var(--vino-oscuro); border-color: var(--vino-oscuro); }
 
-.nav{
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  margin-top: .3rem;
-  z-index: 4;
+.boton--menor{
+  min-height: 36px; padding: .45rem 1.1rem;
+  font-size: var(--t-xs); letter-spacing: .14em;
+  border-color: var(--oro); color: var(--tinta);
 }
+.boton--menor:hover{ background: var(--oro); color: var(--panel); box-shadow: none; }
+.boton--menor svg{ width: 13px; height: 13px; }
 
+.acciones{ display: flex; flex-wrap: wrap; justify-content: center; gap: .45rem; }
+
+.nav{ display: flex; align-items: center; gap: 1.3rem; }
 .nav__enlace{
-  appearance: none;
-  border: 0;
-  background: none;
-  padding: .6rem .2rem;
-  font-family: var(--serif);
-  font-size: var(--t-xs);
-  letter-spacing: .26em;
-  color: var(--tinta-suave);
-  cursor: pointer;
+  appearance: none; border: 0; background: none; padding: .5rem .2rem;
+  font-family: var(--serif); font-size: var(--t-xs); letter-spacing: .26em;
+  color: var(--tinta-suave); cursor: pointer;
   border-bottom: 1px solid transparent;
   transition: color 250ms ease, border-color 250ms ease;
 }
-
 .nav__enlace:hover{ color: var(--vino); border-bottom-color: var(--vino); }
-
-/* Indicador de avance: los pasos sí son una secuencia */
-.progreso{
-  position: absolute;
-  bottom: calc(env(safe-area-inset-bottom) + 1.4rem);
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: .55rem;
-  z-index: 5;
-}
-
-.progreso__punto{
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: transparent;
-  border: 1px solid var(--vino);
-  opacity: .4;
-  transition: opacity 300ms ease, background-color 300ms ease;
-}
-
-.progreso__punto.activo{ background: var(--vino); opacity: 1; }
-
-.escenario[data-paso="1"] .progreso__punto{ border-color: rgba(255,248,238,.85); }
-.escenario[data-paso="1"] .progreso__punto.activo{ background: #FFF8EE; }
 
 /* ============================================================
    7. CUENTA REGRESIVA
    ============================================================ */
 .cuenta{
-  display: grid;
-  grid-template-columns: repeat(4, minmax(56px, 1fr));
-  gap: clamp(.35rem, 2vw, 1.2rem);
-  width: min(430px, 100%);
-  z-index: 4;
+  display: grid; grid-template-columns: repeat(4, minmax(52px, 1fr));
+  gap: clamp(.3rem, 2%, .8rem); width: 100%;
 }
-
 .cuenta__bloque{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: .3rem;
-  padding: .85rem .2rem;
-  background: rgba(255,253,248,.72);
-  border-top: 1px solid var(--oro-claro);
-  border-bottom: 1px solid var(--oro-claro);
+  display: flex; flex-direction: column; align-items: center; gap: .25rem;
+  padding: .7rem .15rem; background: var(--panel-alto);
+  border-top: 1px solid rgba(190,156,94,.5);
+  border-bottom: 1px solid rgba(190,156,94,.5);
 }
-
 .cuenta__numero{
-  font-size: clamp(1.7rem, 1.3rem + 2vw, 2.3rem);
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-  color: var(--vino);
+  font-size: clamp(1.6rem, 1.2rem + 2vw, 2.2rem); line-height: 1;
+  font-variant-numeric: tabular-nums; color: var(--vino);
 }
-
-.cuenta__etiqueta{
-  font-size: var(--t-xs);
-  letter-spacing: .2em;
-  color: var(--tinta-suave);
+.cuenta__numero.tic{ animation: latido 900ms ease-out; }
+@keyframes latido{
+  0%{ transform: translateY(-3px) scale(1.08); opacity: .7; }
+  100%{ transform: none; opacity: 1; }
 }
+.cuenta__etiqueta{ font-size: var(--t-xs); letter-spacing: .18em; color: var(--tinta-suave); }
 
 /* ============================================================
-   8. BOTÓN FLOTANTE DE AUDIO
+   8. FLORES
    ============================================================ */
-.audio-btn{
-  /* Anclado a la esquina de la tarjeta, no de la ventana */
+.jardin{ position: absolute; inset: 0; z-index: 6; pointer-events: none; }
+
+.arreglo{
   position: absolute;
-  right: calc(env(safe-area-inset-right) + 1.1rem);
-  bottom: calc(env(safe-area-inset-bottom) + 1.1rem);
-  z-index: 20;
-
-  width: 38px; height: 38px;
-  display: none;                      /* aparece al abrir la invitación */
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border: 1px solid var(--oro-claro);
-  border-radius: 50%;
-  background: rgba(255,253,248,.75);
-  backdrop-filter: blur(6px);
-  color: var(--vino);
-  cursor: pointer;
-  opacity: .62;
-  transition: opacity 250ms ease, transform 250ms ease;
+  width: clamp(160px, 56%, 250px); height: auto;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,.6));
+  transition: transform 900ms var(--curva);
 }
+.arreglo--si{ top: -4%;    left: -13%; }
+.arreglo--sd{ top: -4%;    right: -13%; transform: scaleX(-1); }
+.arreglo--ii{ bottom: -4%; left: -13%;  transform: scaleY(-1); }
+.arreglo--id{ bottom: -4%; right: -13%; transform: rotate(180deg); }
 
-.audio-btn.visible{ display: flex; }
-.audio-btn:hover{ opacity: 1; transform: scale(1.06); }
-.audio-btn svg{ width: 16px; height: 16px; }
+/* Empuje del follaje cuando cambia la vista: refuerza la profundidad */
+.jardin.pulso .arreglo--si{ transform: scale(1.045) translate(-4px, -4px); }
+.jardin.pulso .arreglo--sd{ transform: scaleX(-1) scale(1.045) translate(-4px, -4px); }
+.jardin.pulso .arreglo--ii{ transform: scaleY(-1) scale(1.045) translate(-4px, -4px); }
+.jardin.pulso .arreglo--id{ transform: rotate(180deg) scale(1.045) translate(-4px, -4px); }
+
+.guirnalda{
+  position: absolute; top: -3%;
+  width: clamp(72px, 23%, 116px); height: auto;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,.5));
+}
+.guirnalda--a{ left: 24%; }
+.guirnalda--b{ right: 22%; transform: scaleX(-1); }
+
+@media (prefers-reduced-motion: no-preference){
+  .guirnalda--a{ transform-origin: top center; animation: mecer 8s ease-in-out infinite; }
+  .guirnalda--b{ transform-origin: top center; animation: mecer-esp 9s ease-in-out infinite; }
+  @keyframes mecer{
+    0%,100%{ transform: rotate(-1.6deg); }
+    50%    { transform: rotate(1.6deg); }
+  }
+  @keyframes mecer-esp{
+    0%,100%{ transform: scaleX(-1) rotate(-1.3deg); }
+    50%    { transform: scaleX(-1) rotate(1.3deg); }
+  }
+}
 
 /* ============================================================
-   9. ACCESIBILIDAD Y PANTALLAS PEQUEÑAS
+   9. PÉTALOS
    ============================================================ */
-@media (prefers-reduced-motion: reduce){
-  .paso{ transition-duration: 1ms; transform: none; }
-  .paso.saliendo{ transform: none; }
+.petalos{
+  position: absolute; inset: 0; z-index: 7;
+  pointer-events: none; overflow: hidden;
+  opacity: 0; transition: opacity 1.4s ease;
+}
+.petalos.visible{ opacity: 1; }
+
+.petalo{
+  position: absolute; top: -8%;
+  width: 13px; height: 9px;
+  border-radius: 62% 18% 62% 18%;
+  background:
+    radial-gradient(circle at 30% 30%, var(--vino-luz), var(--vino-petalo) 45%, var(--vino-oscuro));
+  animation: caer linear infinite;
+}
+@keyframes caer{
+  0%  { transform: translate3d(0,-30px,0) rotate3d(1,1,0,0deg); opacity: 0; }
+  8%  { opacity: .9; }
+  92% { opacity: .7; }
+  100%{ transform: translate3d(var(--deriva,30px), 105vh, 0) rotate3d(1,1,.4,720deg); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce){ .petalos{ display: none; } }
+
+/* ============================================================
+   10. CONTROLES
+   ============================================================ */
+.progreso{
+  position: absolute; bottom: calc(env(safe-area-inset-bottom) + .7rem);
+  left: 50%; transform: translateX(-50%);
+  display: flex; gap: .45rem; z-index: 12;
+}
+.progreso__punto{
+  appearance: none; width: 22px; height: 22px;
+  display: grid; place-items: center; padding: 0; border: 0; background: none; cursor: pointer;
+}
+.progreso__punto::before{
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  border: 1px solid var(--lima-clara); background: transparent; opacity: .5;
+  transition: opacity 320ms ease, background-color 320ms ease, transform 420ms var(--curva);
+}
+.progreso__punto.activo::before{ background: var(--lima); opacity: 1; transform: scale(1.45); }
+
+.audio-btn{
+  position: absolute;
+  right: calc(env(safe-area-inset-right) + .8rem);
+  bottom: calc(env(safe-area-inset-bottom) + .7rem);
+  z-index: 12; width: 34px; height: 34px;
+  display: none; align-items: center; justify-content: center; padding: 0;
+  border: 1px solid rgba(203,222,121,.5); border-radius: 50%;
+  background: rgba(20,14,22,.6); backdrop-filter: blur(6px);
+  color: var(--lima-clara); cursor: pointer; opacity: .7;
+  transition: opacity 250ms ease, transform 250ms var(--curva);
+}
+.audio-btn.visible{ display: flex; }
+.audio-btn:hover{ opacity: 1; transform: scale(1.1); }
+.audio-btn svg{ width: 15px; height: 15px; }
+
+.aviso{
+  position: absolute; left: 50%; bottom: 3.4rem;
+  transform: translate(-50%, 12px); z-index: 30;
+  padding: .5rem 1rem; border-radius: 999px;
+  background: rgba(20,14,22,.94); color: var(--panel-alto);
+  font-size: var(--t-xs); letter-spacing: .1em;
+  opacity: 0; pointer-events: none;
+  transition: opacity 300ms ease, transform 380ms var(--curva);
+}
+.aviso.visible{ opacity: 1; transform: translate(-50%, 0); }
+
+/* ============================================================
+   11. HOJA DE OPCIONES DE CALENDARIO
+   ============================================================ */
+.velo{
+  position: absolute; inset: 0; z-index: 20;
+  background: rgba(12,8,14,.55);
+  backdrop-filter: blur(3px);
+  opacity: 0; visibility: hidden;
+  transition: opacity 320ms ease, visibility 0s linear 320ms;
+}
+.velo.abierto{ opacity: 1; visibility: visible; transition: opacity 320ms ease, visibility 0s; }
+
+.hoja{
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 21;
+  padding: 1.4rem 1.3rem calc(env(safe-area-inset-bottom) + 1.4rem);
+  background: var(--panel);
+  border-top: 2px solid var(--vino);
+  transform: translateY(105%);
+  transition: transform 520ms var(--curva);
+}
+.velo.abierto .hoja{ transform: translateY(0); }
+
+.hoja__titulo{
+  margin: 0 0 .2rem; font-size: var(--t-md); color: var(--vino); text-align: center;
+}
+.hoja__nota{
+  margin: 0 0 1rem; font-size: var(--t-xs); line-height: 1.5;
+  color: var(--tinta-suave); text-align: center;
+}
+.hoja__opciones{ display: flex; flex-direction: column; gap: .5rem; }
+.hoja .boton{ width: 100%; }
+
+/* ============================================================
+   12. PANTALLAS BAJAS
+   ============================================================ */
+@media (max-height: 700px){
+  .paso{ padding: 22px 18px; }
+  .panel{ gap: .45rem; }
+  .arreglo{ width: clamp(130px, 46%, 190px); }
+  .guirnalda{ width: clamp(58px, 19%, 90px); }
+  .cuenta__bloque{ padding: .5rem .15rem; }
+}
+@media (max-height: 590px){
+  .paso{ padding: 16px 14px; }
+  .panel{ gap: .3rem; }
+  .texto{ line-height: 1.45; }
+  .nota{ padding: .5rem .7rem; line-height: 1.4; }
+  .boton{ min-height: 38px; padding: .5rem 1.4rem; }
+  .arreglo{ width: clamp(105px, 38%, 145px); }
 }
 
-@media (max-height: 640px){
-  .paso{ gap: .7rem; padding-top: 2.4rem; padding-bottom: 3.2rem; }
-  .cuenta__bloque{ padding: .55rem .2rem; }
-  .ramo{ width: clamp(110px, 30vw, 180px); }
+@media (prefers-reduced-motion: reduce){
+  .paso{ transition-duration: 1ms; transform: none; filter: none; }
+  .paso.saliendo{ transform: none; filter: none; }
+  .paso.activo .panel > *{ animation: none; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- Audio de fondo. Sin "autoplay": arranca con el botón del paso 1. -->
-<audio id="musica" src="musica.mp3" preload="auto"></audio>
+<!-- Audio sin autoplay: arranca con el botón, de 1:00 a 1:35 -->
+<audio id="musica" src="musica.mp3" preload="metadata"></audio>
 
 <!-- ============================================================
-     DEFINICIÓN DE LAS FLORES (SVG reutilizable, invisible)
-     Se dibuja una vez y se reutiliza con <use> en cada esquina.
+     BIBLIOTECA FLORAL
+     Cada flor se construye con degradados, nervaduras y brillos
+     para dar volumen. No hay flores blancas: la paleta es
+     vinotinto y verde, como en la fotografía de referencia.
      ============================================================ -->
 <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
   <defs>
-    <!-- Rosa: pétalos exteriores + espiral interior -->
-    <g id="rosa">
-      <g class="petalos">
-        <ellipse cx="0"   cy="-21" rx="15" ry="12"/>
-        <ellipse cx="20"  cy="-7"  rx="15" ry="12"/>
-        <ellipse cx="12"  cy="17"  rx="15" ry="12"/>
-        <ellipse cx="-12" cy="17"  rx="15" ry="12"/>
-        <ellipse cx="-20" cy="-7"  rx="15" ry="12"/>
+    <!-- ---------- Degradados ---------- -->
+    <radialGradient id="gCalaOut" cx="35%" cy="28%" r="78%">
+      <stop offset="0%"   stop-color="#B92E58"/>
+      <stop offset="45%"  stop-color="#7C1234"/>
+      <stop offset="100%" stop-color="#38060F"/>
+    </radialGradient>
+    <linearGradient id="gCalaIn" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%"   stop-color="#8E1739"/>
+      <stop offset="60%"  stop-color="#4E0A20"/>
+      <stop offset="100%" stop-color="#2C040F"/>
+    </linearGradient>
+    <linearGradient id="gEspadice" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%"   stop-color="#C9A25E"/>
+      <stop offset="100%" stop-color="#F0DCB4"/>
+    </linearGradient>
+
+    <radialGradient id="gCymPetalo" cx="42%" cy="78%" r="82%">
+      <stop offset="0%"   stop-color="#A81F49"/>
+      <stop offset="55%"  stop-color="#75122F"/>
+      <stop offset="100%" stop-color="#420917"/>
+    </radialGradient>
+    <linearGradient id="gLabelo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#F2DFC4"/>
+      <stop offset="100%" stop-color="#D9B98C"/>
+    </linearGradient>
+
+    <linearGradient id="gHoja" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"   stop-color="#82A345"/>
+      <stop offset="100%" stop-color="#3F5622"/>
+    </linearGradient>
+    <radialGradient id="gAnturio" cx="40%" cy="30%" r="75%">
+      <stop offset="0%"   stop-color="#D3E183"/>
+      <stop offset="55%"  stop-color="#A5C04A"/>
+      <stop offset="100%" stop-color="#6C8A2E"/>
+    </radialGradient>
+    <radialGradient id="gHortensia" cx="35%" cy="30%" r="70%">
+      <stop offset="0%"   stop-color="#D6E58C"/>
+      <stop offset="100%" stop-color="#96B143"/>
+    </radialGradient>
+    <linearGradient id="gAmaranto" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#B9D05C"/>
+      <stop offset="100%" stop-color="#7E9B34"/>
+    </linearGradient>
+    <linearGradient id="gTallo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#7C9A3E"/>
+      <stop offset="100%" stop-color="#48611F"/>
+    </linearGradient>
+
+    <!-- ---------- CALA VINOTINTO ---------- -->
+    <g id="cala">
+      <path d="M1 44 C5 62 8 78 11 94" stroke="url(#gTallo)" stroke-width="5"
+            stroke-linecap="round" fill="none"/>
+      <!-- espata: contorno enrollado con punta caída -->
+      <path d="M0 46 C-9 27 -20 10 -28 -9 C-37 -30 -25 -49 -3 -51
+               C17 -53 31 -38 28 -19 C25 -1 12 13 5 25 C1 32 0 39 0 46 Z"
+            fill="url(#gCalaOut)"/>
+      <!-- garganta -->
+      <path d="M-2 27 C-13 9 -22 -8 -22 -24 C-22 -39 -11 -46 0 -44
+               C13 -42 20 -30 16 -17 C12 -2 3 15 -2 27 Z"
+            fill="url(#gCalaIn)"/>
+      <!-- borde superior enrollado -->
+      <path d="M-3 -51 C17 -53 31 -38 28 -19"
+            stroke="#C8467A" stroke-width="2.4" fill="none" opacity=".5" stroke-linecap="round"/>
+      <!-- nervaduras -->
+      <g stroke="#5A0D24" stroke-width=".9" fill="none" opacity=".45">
+        <path d="M-6 30 C-14 12 -20 -6 -19 -24"/>
+        <path d="M2 30 C-2 12 -4 -8 -2 -26"/>
+        <path d="M9 26 C10 10 12 -8 12 -22"/>
       </g>
-      <circle cx="0" cy="0" r="17" class="corazon"/>
-      <path d="M-9 3 A9 9 0 1 1 5 8 A5.5 5.5 0 1 0 -1 -2" fill="none" class="espiral" stroke-width="2" stroke-linecap="round"/>
+      <!-- espádice -->
+      <path d="M-4 21 C-7 6 -9 -12 -8 -29" stroke="url(#gEspadice)" stroke-width="4.4"
+            stroke-linecap="round" fill="none"/>
+      <!-- brillo satinado -->
+      <path d="M9 -38 C20 -33 25 -21 22 -10" stroke="#DE7BA0" stroke-width="3"
+            opacity=".28" fill="none" stroke-linecap="round"/>
     </g>
 
-    <!-- Hoja -->
-    <path id="hoja" d="M0 0 C11 -19 30 -25 40 -23 C39 -9 24 6 0 0 Z"/>
+    <!-- ---------- ORQUÍDEA CYMBIDIUM ---------- -->
+    <g id="cym-petalo">
+      <path d="M0 -1 C10 -13 12 -31 0 -46 C-12 -31 -10 -13 0 -1 Z" fill="url(#gCymPetalo)"/>
+      <g stroke="#4A0A1D" stroke-width=".8" fill="none" opacity=".5">
+        <path d="M0 -4 L0 -42"/>
+        <path d="M0 -14 C4 -20 5 -28 3 -36"/>
+        <path d="M0 -14 C-4 -20 -5 -28 -3 -36"/>
+      </g>
+      <path d="M3 -12 C7 -20 8 -30 5 -38" stroke="#C0416B" stroke-width="1.6"
+            opacity=".3" fill="none"/>
+    </g>
 
-    <!-- Ramo completo: 3 rosas, hojas y bayas -->
-    <g id="ramo">
-      <!-- hojas del fondo -->
-      <use href="#hoja" fill="var(--salvia)"        transform="translate(96 26) rotate(18)"/>
-      <use href="#hoja" fill="var(--salvia-clara)"  transform="translate(112 62) rotate(58)"/>
-      <use href="#hoja" fill="var(--salvia)"        transform="translate(46 104) rotate(112)"/>
-      <use href="#hoja" fill="var(--salvia-clara)"  transform="translate(24 62) rotate(150)"/>
-      <use href="#hoja" fill="var(--salvia)"        transform="translate(60 12) rotate(-30)"/>
-      <use href="#hoja" fill="var(--salvia-clara)"  transform="translate(120 108) rotate(74)"/>
+    <g id="cymbidium">
+      <use href="#cym-petalo" transform="rotate(0)"/>
+      <use href="#cym-petalo" transform="rotate(72)"/>
+      <use href="#cym-petalo" transform="rotate(144)"/>
+      <use href="#cym-petalo" transform="rotate(216)"/>
+      <use href="#cym-petalo" transform="rotate(288)"/>
+      <!-- labelo crema moteado, la firma de la cymbidium -->
+      <path d="M-9 1 C-12 12 -6 21 0 21 C6 21 12 12 9 1 C5 -3 -5 -3 -9 1 Z"
+            fill="url(#gLabelo)"/>
+      <g fill="#75122F">
+        <ellipse cx="-3.4" cy="7" rx="2" ry="1.5"/>
+        <ellipse cx="3.4"  cy="6" rx="1.9" ry="1.4"/>
+        <ellipse cx="0"    cy="12" rx="2.1" ry="1.6"/>
+        <ellipse cx="-4.4" cy="14" rx="1.5" ry="1.2"/>
+        <ellipse cx="4.4"  cy="13" rx="1.5" ry="1.2"/>
+        <ellipse cx="0"    cy="17" rx="1.4" ry="1"/>
+      </g>
+      <path d="M-4 -2 C-4 -7 4 -7 4 -2 C4 2 -4 2 -4 -2 Z" fill="#E7CFA4"/>
+    </g>
 
-      <!-- bayas -->
-      <g fill="var(--rosa-viejo)">
-        <circle cx="128" cy="34" r="4.5"/>
-        <circle cx="139" cy="46" r="3.6"/>
-        <circle cx="124" cy="52" r="3"/>
-        <circle cx="34"  cy="112" r="4.2"/>
-        <circle cx="22"  cy="100" r="3.2"/>
+    <!-- ---------- ANTURIO VERDE ---------- -->
+    <g id="anturio">
+      <path d="M0 38 C-28 19 -37 -8 -20 -27 C-9 -39 3 -35 7 -25
+               C11 -35 25 -39 35 -27 C50 -8 28 19 0 38 Z"
+            fill="url(#gAnturio)"/>
+      <g stroke="#6C8A2E" stroke-width=".9" fill="none" opacity=".55">
+        <path d="M4 34 C-8 18 -16 2 -14 -16"/>
+        <path d="M6 32 C14 16 22 2 22 -14"/>
+        <path d="M5 30 C4 14 4 0 6 -20"/>
       </g>
+      <path d="M6 20 C16 6 24 -8 28 -22" stroke="#EBDFA8" stroke-width="4"
+            stroke-linecap="round" fill="none"/>
+      <path d="M0 38 C1 52 3 64 5 74" stroke="url(#gTallo)" stroke-width="4"
+            stroke-linecap="round" fill="none"/>
+      <path d="M-14 -14 C-6 -24 4 -26 10 -20" stroke="#E2EFA6" stroke-width="2.6"
+            opacity=".35" fill="none" stroke-linecap="round"/>
+    </g>
 
-      <!-- rosa vino grande -->
-      <g class="rosa-vino" transform="translate(58 54) scale(1.05)">
-        <use href="#rosa"/>
+    <!-- ---------- HORTENSIA VERDE ---------- -->
+    <g id="hortensia" fill="url(#gHortensia)">
+      <circle cx="0" cy="0" r="7.4"/><circle cx="13" cy="-4" r="6.6"/>
+      <circle cx="-13" cy="-3" r="6.8"/><circle cx="7" cy="11" r="6.4"/>
+      <circle cx="-8" cy="11" r="6.2"/><circle cx="4" cy="-12" r="6"/>
+      <circle cx="-5" cy="-13" r="5.6"/><circle cx="18" cy="7" r="5.2"/>
+      <circle cx="-19" cy="6" r="5.2"/><circle cx="11" cy="-14" r="4.6"/>
+      <circle cx="-2" cy="19" r="4.8"/>
+    </g>
+
+    <!-- ---------- AMARANTO COLGANTE ---------- -->
+    <g id="amaranto">
+      <path d="M0 0 C8 22 -5 42 3 64 C11 85 -3 101 5 122"
+            stroke="url(#gAmaranto)" stroke-width="8.5" stroke-linecap="round" fill="none"/>
+      <path d="M0 0 C8 22 -5 42 3 64 C11 85 -3 101 5 122"
+            stroke="#D2E28A" stroke-width="3" stroke-linecap="round" fill="none" opacity=".6"/>
+      <g fill="#BCD466">
+        <circle cx="4"  cy="10"  r="4"/><circle cx="-2" cy="22" r="3.6"/>
+        <circle cx="-1" cy="34"  r="3.8"/><circle cx="3" cy="46" r="3.6"/>
+        <circle cx="6"  cy="58"  r="3.9"/><circle cx="7" cy="70" r="3.5"/>
+        <circle cx="2"  cy="82"  r="3.6"/><circle cx="0" cy="94" r="3.3"/>
+        <circle cx="3"  cy="106" r="3.1"/><circle cx="5" cy="117" r="2.8"/>
       </g>
-      <!-- rosa marfil -->
-      <g class="rosa-marfil" transform="translate(108 76) scale(.82)">
-        <use href="#rosa"/>
+      <g fill="#8FA93E" opacity=".7">
+        <circle cx="-2" cy="16" r="2.4"/><circle cx="6" cy="40" r="2.4"/>
+        <circle cx="1"  cy="64" r="2.4"/><circle cx="6" cy="88" r="2.2"/>
       </g>
-      <!-- rosa vino pequeña -->
-      <g class="rosa-vino" transform="translate(30 92) scale(.62)">
-        <use href="#rosa"/>
+    </g>
+
+    <!-- ---------- HOJAS ---------- -->
+    <path id="hoja" d="M0 0 C13 -21 34 -28 46 -26 C45 -10 27 8 0 0 Z" fill="url(#gHoja)"/>
+
+    <!-- Monstera: hoja grande con cortes -->
+    <g id="monstera">
+      <path d="M0 0 C6 -34 34 -56 62 -54 C70 -26 52 6 0 0 Z" fill="url(#gHoja)"/>
+      <g stroke="#2F421A" stroke-width="3.4" stroke-linecap="round" opacity=".85">
+        <path d="M20 -12 L44 -20"/>
+        <path d="M16 -24 L40 -34"/>
+        <path d="M14 -36 L34 -45"/>
       </g>
+      <path d="M2 -2 C18 -18 40 -36 60 -50" stroke="#96B14C" stroke-width="1.6"
+            fill="none" opacity=".55"/>
+    </g>
+
+    <!-- ============================================================
+         ARREGLO DE ESQUINA
+         ============================================================ -->
+    <g id="arreglo">
+      <!-- follaje de fondo -->
+      <use href="#monstera" transform="translate(8 66) rotate(-14) scale(.9)" opacity=".92"/>
+      <use href="#hoja" transform="translate(128 30) rotate(12)"/>
+      <use href="#hoja" transform="translate(156 80) rotate(64)"/>
+      <use href="#hoja" transform="translate(56 128) rotate(120)"/>
+      <use href="#hoja" transform="translate(86 14) rotate(-30)" opacity=".9"/>
+      <use href="#hoja" transform="translate(160 130) rotate(80)" opacity=".85"/>
+
+      <!-- hortensias verdes -->
+      <use href="#hortensia" transform="translate(134 54) scale(1)"/>
+      <use href="#hortensia" transform="translate(38 112) scale(.82)"/>
+
+      <!-- amaranto colgando -->
+      <use href="#amaranto" transform="translate(100 84) rotate(5) scale(.8)"/>
+      <use href="#amaranto" transform="translate(152 92) rotate(-9) scale(.62)"/>
+      <use href="#amaranto" transform="translate(72 96) rotate(12) scale(.5)" opacity=".9"/>
+
+      <!-- anturio verde -->
+      <use href="#anturio" transform="translate(30 58) rotate(-16) scale(.82)"/>
+
+      <!-- calas -->
+      <use href="#cala" transform="translate(70 58) rotate(-26) scale(1)"/>
+      <use href="#cala" transform="translate(140 100) rotate(30) scale(.74)"/>
+      <use href="#cala" transform="translate(24 116) rotate(-52) scale(.6)"/>
+
+      <!-- orquídeas cymbidium -->
+      <use href="#cymbidium" transform="translate(108 44) scale(.95)"/>
+      <use href="#cymbidium" transform="translate(52 104) scale(.76)"/>
+      <use href="#cymbidium" transform="translate(150 66) scale(.6)"/>
+    </g>
+
+    <!-- Guirnalda de amaranto para el borde superior -->
+    <g id="guirnalda-am">
+      <use href="#hoja" transform="translate(32 12) rotate(44) scale(.72)"/>
+      <use href="#hortensia" transform="translate(30 18) scale(.68)"/>
+      <use href="#amaranto" transform="translate(26 26) scale(1)"/>
+      <use href="#amaranto" transform="translate(44 22) rotate(8) scale(.78)" opacity=".92"/>
+      <use href="#cymbidium" transform="translate(32 20) scale(.62)"/>
     </g>
   </defs>
 </svg>
 
-<!-- Estilos de color de las flores (fuera del bloque anterior por claridad) -->
-<style>
-  .rosa-vino   .petalos{ fill: var(--vino-claro); }
-  .rosa-vino   .corazon{ fill: var(--vino); }
-  .rosa-vino   .espiral{ stroke: rgba(255,240,235,.55); }
-
-  .rosa-marfil .petalos{ fill: #F6EEDC; }
-  .rosa-marfil .corazon{ fill: #FFFBF1; }
-  .rosa-marfil .espiral{ stroke: var(--oro); }
-</style>
-
 <main class="escenario" id="escenario" data-paso="1">
 
   <!-- ---------- PASO 1 · PORTADA ---------- -->
-  <section class="paso portada activo" id="paso-1" aria-label="Portada">
-    <svg class="ramo ramo--sup" viewBox="0 0 170 140" aria-hidden="true"><use href="#ramo"/></svg>
-    <svg class="ramo ramo--inf" viewBox="0 0 170 140" aria-hidden="true"><use href="#ramo"/></svg>
-
-    <h1 class="portada__script">Nos casamos</h1>
-
-    <span class="filete" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-8-5.1-8-10.4A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 3.6C20 15.9 12 21 12 21z"/></svg>
-    </span>
-
-    <p class="portada__frase">
-      Desde hoy, cada camino que tomemos será uno solo. Gracias por acompañarnos al inicio de esta historia.
-    </p>
-
-    <p class="portada__fecha">21 · 11 · 2026</p>
-
-    <button class="boton boton--claro" id="abrir" type="button">Abrir invitación</button>
+  <section class="paso activo" id="paso-1" aria-label="Portada">
+    <div class="panel panel--foto">
+      <h1 class="portada__script">Nos casamos</h1>
+      <span class="filete" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-8-5.1-8-10.4A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 3.6C20 15.9 12 21 12 21z"/></svg>
+      </span>
+      <p class="portada__frase">
+        Desde hoy, cada camino que tomemos será uno solo. Gracias por acompañarnos al inicio de esta historia.
+      </p>
+      <p class="portada__fecha">21 · 11 · 2026</p>
+      <button class="boton boton--claro" id="abrir" type="button">Abrir invitación</button>
+    </div>
   </section>
 
   <!-- ---------- PASO 2 · CUENTA REGRESIVA ---------- -->
   <section class="paso" id="paso-2" aria-label="Cuenta regresiva" aria-hidden="true">
-    <svg class="ramo ramo--sup" viewBox="0 0 170 140" aria-hidden="true"><use href="#ramo"/></svg>
-    <svg class="ramo ramo--inf" viewBox="0 0 170 140" aria-hidden="true"><use href="#ramo"/></svg>
+    <div class="panel">
+      <h1 class="titulo">Falta poco</h1>
+      <span class="filete" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-8-5.1-8-10.4A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 3.6C20 15.9 12 21 12 21z"/></svg>
+      </span>
 
-    <h1 class="titulo">Falta poco</h1>
+      <div class="cuenta">
+        <div class="cuenta__bloque"><span class="cuenta__numero" id="dias">00</span><span class="cuenta__etiqueta">días</span></div>
+        <div class="cuenta__bloque"><span class="cuenta__numero" id="horas">00</span><span class="cuenta__etiqueta">horas</span></div>
+        <div class="cuenta__bloque"><span class="cuenta__numero" id="minutos">00</span><span class="cuenta__etiqueta">min</span></div>
+        <div class="cuenta__bloque"><span class="cuenta__numero" id="segundos">00</span><span class="cuenta__etiqueta">seg</span></div>
+      </div>
 
-    <span class="filete" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-8-5.1-8-10.4A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 3.6C20 15.9 12 21 12 21z"/></svg>
-    </span>
+      <p class="texto texto--tenue" id="mensaje-cuenta">Para el día en que diremos «sí».</p>
 
-    <!-- Sin aria-live: un contador que se anuncia cada segundo
-         resulta insoportable con lector de pantalla. -->
-    <div class="cuenta" id="cuenta">
-      <div class="cuenta__bloque"><span class="cuenta__numero" id="dias">00</span><span class="cuenta__etiqueta">días</span></div>
-      <div class="cuenta__bloque"><span class="cuenta__numero" id="horas">00</span><span class="cuenta__etiqueta">horas</span></div>
-      <div class="cuenta__bloque"><span class="cuenta__numero" id="minutos">00</span><span class="cuenta__etiqueta">min</span></div>
-      <div class="cuenta__bloque"><span class="cuenta__numero" id="segundos">00</span><span class="cuenta__etiqueta">seg</span></div>
-    </div>
+      <div class="acciones">
+        <button class="boton boton--menor" id="calendario" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
+          Agendar el día
+        </button>
+      </div>
 
-    <p class="texto texto--tenue" id="mensaje-cuenta">Para el día en que diremos «sí».</p>
-
-    <div class="nav">
-      <button class="nav__enlace" type="button" data-ir="1">Atrás</button>
-      <button class="boton" type="button" data-ir="3">Siguiente</button>
+      <div class="nav">
+        <button class="nav__enlace" type="button" data-ir="1">Atrás</button>
+        <button class="boton" type="button" data-ir="3">Siguiente</button>
+      </div>
     </div>
   </section>
 
   <!-- ---------- PASO 3 · LUGAR Y FECHA ---------- -->
   <section class="paso" id="paso-3" aria-label="Lugar y fecha" aria-hidden="true">
-    <svg class="ramo ramo--sup" viewBox="0 0 170 140" aria-hidden="true"><use href="#ramo"/></svg>
-    <svg class="ramo ramo--inf" viewBox="0 0 170 140" aria-hidden="true"><use href="#ramo"/></svg>
+    <div class="panel">
+      <h1 class="titulo">Dónde y cuándo</h1>
+      <span class="filete" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-8-5.1-8-10.4A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 3.6C20 15.9 12 21 12 21z"/></svg>
+      </span>
 
-    <h1 class="titulo">Dónde y cuándo</h1>
+      <div class="dato">
+        <span class="dato__valor dato__valor--grande">Iglesia Apostólica de Jesucristo</span>
+        <span class="dato__nota">Cra. 70c #65-63, Bogotá</span>
+      </div>
 
-    <span class="filete" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-8-5.1-8-10.4A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 3.6C20 15.9 12 21 12 21z"/></svg>
-    </span>
+      <div class="dato">
+        <span class="dato__valor">Sábado 21 de noviembre de 2026</span>
+        <span class="dato__valor">5:00 p. m.</span>
+      </div>
 
-    <div class="dato">
-      <span class="dato__valor dato__valor--grande">Iglesia Apostólica de Jesucristo</span>
-      <span class="dato__nota">Cra. 70c #65-63, Bogotá</span>
-    </div>
+      <a class="boton"
+         href="https://www.google.com/maps/search/?api=1&query=Iglesia%20Apost%C3%B3lica%20de%20Jesucristo%2C%20Cra.%2070c%20%2365-63%2C%20Bogot%C3%A1"
+         target="_blank" rel="noopener noreferrer">Ver en el mapa</a>
 
-    <div class="dato">
-      <span class="dato__valor">Sábado 21 de noviembre de 2026</span>
-      <span class="dato__valor">5:00 p. m.</span>
-    </div>
+      <div class="acciones">
+        <button class="boton boton--menor" id="copiar" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+          Copiar dirección
+        </button>
+      </div>
 
-    <a class="boton"
-       href="https://www.google.com/maps/search/?api=1&query=Iglesia%20Apost%C3%B3lica%20de%20Jesucristo%2C%20Cra.%2070c%20%2365-63%2C%20Bogot%C3%A1"
-       target="_blank" rel="noopener noreferrer">Ver en el mapa</a>
-
-    <div class="nav">
-      <button class="nav__enlace" type="button" data-ir="2">Atrás</button>
-      <button class="boton" type="button" data-ir="4">Siguiente</button>
+      <div class="nav">
+        <button class="nav__enlace" type="button" data-ir="2">Atrás</button>
+        <button class="boton" type="button" data-ir="4">Siguiente</button>
+      </div>
     </div>
   </section>
 
   <!-- ---------- PASO 4 · VESTIMENTA Y CONFIRMACIÓN ---------- -->
   <section class="paso" id="paso-4" aria-label="Vestimenta y confirmación" aria-hidden="true">
-    <svg class="ramo ramo--sup" viewBox="0 0 170 140" aria-hidden="true"><use href="#ramo"/></svg>
-    <svg class="ramo ramo--inf" viewBox="0 0 170 140" aria-hidden="true"><use href="#ramo"/></svg>
+    <div class="panel">
+      <h1 class="titulo">Para acompañarnos</h1>
 
-    <h1 class="titulo">Para acompañarnos</h1>
+      <div class="dato">
+        <span class="dato__nota">Código de vestimenta</span>
+        <span class="dato__valor dato__valor--grande">Formal / elegante</span>
+      </div>
 
-    <span class="filete" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-8-5.1-8-10.4A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 3.6C20 15.9 12 21 12 21z"/></svg>
-    </span>
+      <p class="texto">
+        Nos hará muy felices contar contigo. Por favor confirma tu asistencia antes del 16 de septiembre de 2026.
+      </p>
 
-    <div class="dato">
-      <span class="dato__nota">Código de vestimenta</span>
-      <span class="dato__valor dato__valor--grande">Formal / elegante</span>
-    </div>
+      <p class="nota">
+        Al diligenciar el formulario, registra el nombre de todos tus acompañantes. Así podremos tener el conteo exacto de asistentes.
+      </p>
 
-    <p class="texto">
-      Nos hará muy felices contar contigo. Por favor confirma tu asistencia antes del 16 de septiembre de 2026.
-    </p>
+      <a class="boton boton--solido"
+         href="https://docs.google.com/forms/d/e/1FAIpQLSfxNvw6r9Qw5DmA05Vt3YRMP55VCTju9qdCROsRTQRDVhGVVg/viewform"
+         target="_blank" rel="noopener noreferrer">Confirma tu asistencia</a>
 
-    <p class="nota">
-      Al diligenciar el formulario, registra el nombre de todos tus acompañantes. Así podremos tener el conteo exacto de asistentes.
-    </p>
+      <div class="acciones">
+        <button class="boton boton--menor" id="compartir" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+          Compartir
+        </button>
+      </div>
 
-    <a class="boton boton--solido"
-       href="https://docs.google.com/forms/d/e/1FAIpQLSfxNvw6r9Qw5DmA05Vt3YRMP55VCTju9qdCROsRTQRDVhGVVg/viewform"
-       target="_blank" rel="noopener noreferrer">Confirma tu asistencia</a>
-
-    <div class="nav">
-      <button class="nav__enlace" type="button" data-ir="3">Atrás</button>
+      <div class="nav">
+        <button class="nav__enlace" type="button" data-ir="3">Atrás</button>
+      </div>
     </div>
   </section>
 
-  <!-- Marco dorado e indicador de avance, comunes a todos los pasos -->
-  <div class="marco" aria-hidden="true"></div>
-
-  <div class="progreso" aria-hidden="true">
-    <span class="progreso__punto activo"></span>
-    <span class="progreso__punto"></span>
-    <span class="progreso__punto"></span>
-    <span class="progreso__punto"></span>
+  <!-- ---------- FLORES ---------- -->
+  <div class="jardin" id="jardin" aria-hidden="true">
+    <svg class="arreglo arreglo--si" viewBox="0 0 200 175"><use href="#arreglo"/></svg>
+    <svg class="arreglo arreglo--sd" viewBox="0 0 200 175"><use href="#arreglo"/></svg>
+    <svg class="arreglo arreglo--ii" viewBox="0 0 200 175"><use href="#arreglo"/></svg>
+    <svg class="arreglo arreglo--id" viewBox="0 0 200 175"><use href="#arreglo"/></svg>
+    <svg class="guirnalda guirnalda--a" viewBox="0 0 85 155"><use href="#guirnalda-am"/></svg>
+    <svg class="guirnalda guirnalda--b" viewBox="0 0 85 155"><use href="#guirnalda-am"/></svg>
   </div>
 
-  <!-- Botón flotante de audio, dentro de la tarjeta -->
+  <div class="petalos" id="petalos" aria-hidden="true"></div>
+
+  <div class="progreso" role="tablist" aria-label="Secciones de la invitación">
+    <button class="progreso__punto activo" type="button" data-ir="1" aria-label="Portada"></button>
+    <button class="progreso__punto" type="button" data-ir="2" aria-label="Cuenta regresiva"></button>
+    <button class="progreso__punto" type="button" data-ir="3" aria-label="Lugar y fecha"></button>
+    <button class="progreso__punto" type="button" data-ir="4" aria-label="Confirmación"></button>
+  </div>
+
   <button class="audio-btn" id="audio-btn" type="button" aria-label="Pausar música" title="Pausar música">
     <svg id="icono-audio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -657,33 +883,51 @@ body{
       <path d="M15.5 8.5a5 5 0 0 1 0 7"></path>
     </svg>
   </button>
+
+  <!-- ---------- HOJA DE CALENDARIO ---------- -->
+  <div class="velo" id="velo">
+    <div class="hoja" role="dialog" aria-modal="true" aria-label="Guardar la fecha">
+      <p class="hoja__titulo">Guardar la fecha</p>
+      <p class="hoja__nota">Elige tu calendario. Se abrirá con los datos ya listos; solo tienes que guardar.</p>
+      <div class="hoja__opciones" id="opciones-cal"></div>
+      <div class="hoja__opciones" style="margin-top:.6rem">
+        <button class="boton boton--menor" id="cerrar-cal" type="button">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
 </main>
 
 <script>
-/* ============================================================
-   LÓGICA
-   1) Navegación entre pasos (sin scroll)
-   2) Audio: arranca con el botón y se corta en 1:35
-   3) Cuenta regresiva
-   ============================================================ */
 (function () {
   "use strict";
 
-  /* ---------- 1. NAVEGACIÓN ---------- */
-  const escenario  = document.getElementById("escenario");
-  const pasos      = Array.from(document.querySelectorAll(".paso"));
-  const puntos     = Array.from(document.querySelectorAll(".progreso__punto"));
-  let   pasoActual = 1;
+  const SITIO = "https://carloooo21.github.io/Boda_Invitation/";
+
+  /* ============================================================
+     1. NAVEGACIÓN CON PROFUNDIDAD
+     ============================================================ */
+  const escenario = document.getElementById("escenario");
+  const jardin    = document.getElementById("jardin");
+  const pasos     = Array.from(document.querySelectorAll(".paso"));
+  const puntos    = Array.from(document.querySelectorAll(".progreso__punto"));
+  let   actual = 1, enTransito = false;
 
   function irA(numero) {
-    if (numero === pasoActual || numero < 1 || numero > pasos.length) return;
+    if (numero === actual || numero < 1 || numero > pasos.length || enTransito) return;
 
-    const saliente = pasos[pasoActual - 1];
+    const saliente = pasos[actual - 1];
     const entrante = pasos[numero - 1];
-    const haciaAdelante = numero > pasoActual;
+    const adelante = numero > actual;
 
-    // El paso que sale se desvanece hacia arriba o hacia abajo según la dirección
-    saliente.classList.toggle("saliendo", haciaAdelante);
+    // La dirección define de qué lado entra y hacia dónde gira
+    entrante.style.setProperty("--x",       (adelante ?  64 : -64) + "px");
+    entrante.style.setProperty("--giro",    (adelante ?  16 : -16) + "deg");
+    saliente.style.setProperty("--x-out",   (adelante ? -64 :  64) + "px");
+    saliente.style.setProperty("--giro-out",(adelante ? -16 :  16) + "deg");
+
+    saliente.classList.add("saliendo");
     saliente.classList.remove("activo");
     saliente.setAttribute("aria-hidden", "true");
 
@@ -693,10 +937,16 @@ body{
 
     puntos.forEach((p, i) => p.classList.toggle("activo", i === numero - 1));
 
-    pasoActual = numero;
+    // Las flores respiran al cambiar de vista
+    jardin.classList.add("pulso");
+    setTimeout(() => jardin.classList.remove("pulso"), 420);
+
+    actual = numero;
     escenario.dataset.paso = String(numero);
 
-    // Enfoca el primer elemento del nuevo paso (teclado y lector de pantalla)
+    enTransito = true;
+    setTimeout(() => { enTransito = false; }, 420);
+
     const foco = entrante.querySelector("h1, button, a");
     if (foco) foco.focus({ preventScroll: true });
   }
@@ -706,12 +956,33 @@ body{
   });
 
   document.addEventListener("keydown", e => {
-    if (e.key === "ArrowRight") irA(pasoActual + 1);
-    if (e.key === "ArrowLeft")  irA(pasoActual - 1);
+    if (e.key === "ArrowRight") irA(actual + 1);
+    if (e.key === "ArrowLeft")  irA(actual - 1);
+    if (e.key === "Escape")     cerrarHoja();
   });
 
-  /* ---------- 2. AUDIO ---------- */
-  const LIMITE     = 95;                       // 1:35 expresado en segundos
+  // Deslizar con el dedo
+  let xIni = null, yIni = null;
+  escenario.addEventListener("touchstart", e => {
+    xIni = e.changedTouches[0].clientX;
+    yIni = e.changedTouches[0].clientY;
+  }, { passive: true });
+
+  escenario.addEventListener("touchend", e => {
+    if (xIni === null) return;
+    const dx = e.changedTouches[0].clientX - xIni;
+    const dy = e.changedTouches[0].clientY - yIni;
+    if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.6) {
+      irA(dx < 0 ? actual + 1 : actual - 1);
+    }
+    xIni = yIni = null;
+  }, { passive: true });
+
+  /* ============================================================
+     2. AUDIO · fragmento 1:00 a 1:35
+     ============================================================ */
+  const INICIO = 60, FIN = 95;
+
   const musica     = document.getElementById("musica");
   const botonAbrir = document.getElementById("abrir");
   const botonAudio = document.getElementById("audio-btn");
@@ -727,72 +998,218 @@ body{
     botonAudio.title = etiqueta;
   }
 
-  function reproducir() {
-    // Si ya llegó al corte, vuelve a empezar desde el segundo 0
-    if (musica.currentTime >= LIMITE - 0.05) musica.currentTime = 0;
-    const intento = musica.play();
-    if (intento && typeof intento.catch === "function") {
-      // Si el navegador bloquea el audio, la invitación funciona igual
-      intento.catch(() => pintarIcono(false));
+  // Saltar a 1:00 exige que el navegador conozca ya la duración del archivo
+  function ubicarEnInicio(despues) {
+    if (musica.readyState > 0) { musica.currentTime = INICIO; despues(); }
+    else {
+      musica.addEventListener("loadedmetadata", () => {
+        musica.currentTime = INICIO; despues();
+      }, { once: true });
+      musica.load();
     }
   }
 
-  // Este clic es la interacción que desbloquea el audio en el navegador
+  function reproducir() {
+    const arrancar = () => {
+      const intento = musica.play();
+      if (intento && typeof intento.catch === "function") intento.catch(() => pintarIcono(false));
+    };
+    if (musica.currentTime < INICIO || musica.currentTime >= FIN - 0.05) ubicarEnInicio(arrancar);
+    else arrancar();
+  }
+
   botonAbrir.addEventListener("click", () => {
-    musica.currentTime = 0;
     reproducir();
     botonAudio.classList.add("visible");
+    document.getElementById("petalos").classList.add("visible");
     irA(2);
   });
 
-  // Corte exacto en 1:35
   musica.addEventListener("timeupdate", () => {
-    if (musica.currentTime >= LIMITE) {
+    if (musica.currentTime >= FIN) {
       musica.pause();
-      musica.currentTime = LIMITE;
+      musica.currentTime = FIN;
       pintarIcono(false);
     }
   });
 
   musica.addEventListener("play",  () => pintarIcono(true));
   musica.addEventListener("pause", () => pintarIcono(false));
+  botonAudio.addEventListener("click", () => { musica.paused ? reproducir() : musica.pause(); });
 
-  botonAudio.addEventListener("click", () => {
-    musica.paused ? reproducir() : musica.pause();
-  });
-
-  /* ---------- 3. CUENTA REGRESIVA ---------- */
-  // 21 de noviembre de 2026, 5:00 p. m., hora de Colombia (UTC-5)
+  /* ============================================================
+     3. CUENTA REGRESIVA
+     ============================================================ */
   const BODA = new Date("2026-11-21T17:00:00-05:00").getTime();
-
   const campos = {
-    dias:     document.getElementById("dias"),
-    horas:    document.getElementById("horas"),
-    minutos:  document.getElementById("minutos"),
+    dias: document.getElementById("dias"),
+    horas: document.getElementById("horas"),
+    minutos: document.getElementById("minutos"),
     segundos: document.getElementById("segundos")
   };
   const mensajeCuenta = document.getElementById("mensaje-cuenta");
-  const dosDigitos = n => String(n).padStart(2, "0");
+  const dd = n => String(n).padStart(2, "0");
 
   function actualizarCuenta() {
     const restante = BODA - Date.now();
-
     if (restante <= 0) {
       Object.values(campos).forEach(c => c.textContent = "00");
       mensajeCuenta.textContent = "Hoy es el día. Te esperamos.";
       clearInterval(reloj);
       return;
     }
-
     const seg = Math.floor(restante / 1000);
-    campos.dias.textContent     = dosDigitos(Math.floor(seg / 86400));
-    campos.horas.textContent    = dosDigitos(Math.floor(seg / 3600) % 24);
-    campos.minutos.textContent  = dosDigitos(Math.floor(seg / 60) % 60);
-    campos.segundos.textContent = dosDigitos(seg % 60);
-  }
+    campos.dias.textContent     = dd(Math.floor(seg / 86400));
+    campos.horas.textContent    = dd(Math.floor(seg / 3600) % 24);
+    campos.minutos.textContent  = dd(Math.floor(seg / 60) % 60);
+    campos.segundos.textContent = dd(seg % 60);
 
+    campos.segundos.classList.remove("tic");
+    void campos.segundos.offsetWidth;      // reinicia la animación
+    campos.segundos.classList.add("tic");
+
+    const dias = Math.floor(seg / 86400);
+    mensajeCuenta.textContent =
+      dias > 30 ? "Para el día en que diremos «sí»." :
+      dias > 7  ? "Ya se puede contar por semanas." :
+      dias > 1  ? "Últimos días. Prepara tu mejor traje." :
+                  "Es mañana. Te esperamos.";
+  }
   actualizarCuenta();
   const reloj = setInterval(actualizarCuenta, 1000);
+
+  /* ============================================================
+     4. PÉTALOS
+     ============================================================ */
+  (function sembrarPetalos() {
+    const cont = document.getElementById("petalos");
+    const cantidad = window.matchMedia("(max-width: 500px)").matches ? 14 : 20;
+    for (let i = 0; i < cantidad; i++) {
+      const p = document.createElement("span");
+      p.className = "petalo";
+      p.style.left = (Math.random() * 100) + "%";
+      p.style.transform = "scale(" + (0.65 + Math.random() * 0.85).toFixed(2) + ")";
+      p.style.animationDuration = (9 + Math.random() * 10).toFixed(1) + "s";
+      p.style.animationDelay = (-Math.random() * 16).toFixed(1) + "s";
+      p.style.setProperty("--deriva", (Math.random() * 100 - 50).toFixed(0) + "px");
+      p.style.opacity = (0.5 + Math.random() * 0.45).toFixed(2);
+      cont.appendChild(p);
+    }
+  })();
+
+  /* ============================================================
+     5. AVISOS
+     ============================================================ */
+  const aviso = document.getElementById("aviso");
+  let tAviso;
+  function mostrarAviso(texto) {
+    aviso.textContent = texto;
+    aviso.classList.add("visible");
+    clearTimeout(tAviso);
+    tAviso = setTimeout(() => aviso.classList.remove("visible"), 2600);
+  }
+
+  /* ============================================================
+     6. GUARDAR LA FECHA
+     Google Calendar y Outlook aceptan un enlace con los datos del
+     evento: se abre la cuenta que la persona ya tiene iniciada y
+     solo confirma. Apple no tiene un enlace equivalente, así que
+     para iPhone y Mac se abre el archivo boda.ics alojado en el
+     mismo sitio, que iOS entrega directo a la app Calendario.
+     ============================================================ */
+  const EVENTO = {
+    titulo: "Nuestra boda",
+    inicio: "20261121T220000Z",          // 5:00 p. m. de Colombia, en UTC
+    fin:    "20261122T010000Z",
+    lugar:  "Iglesia Apostólica de Jesucristo, Cra. 70c #65-63, Bogotá",
+    detalle:"Ceremonia a las 5:00 p. m. Código de vestimenta: formal / elegante. Invitación: " + SITIO
+  };
+
+  const enlaceGoogle =
+    "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+    "&text="     + encodeURIComponent(EVENTO.titulo) +
+    "&dates="    + EVENTO.inicio + "/" + EVENTO.fin +
+    "&details="  + encodeURIComponent(EVENTO.detalle) +
+    "&location=" + encodeURIComponent(EVENTO.lugar);
+
+  const enlaceOutlook =
+    "https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent" +
+    "&subject="  + encodeURIComponent(EVENTO.titulo) +
+    "&startdt=2026-11-21T22:00:00Z&enddt=2026-11-22T01:00:00Z" +
+    "&body="     + encodeURIComponent(EVENTO.detalle) +
+    "&location=" + encodeURIComponent(EVENTO.lugar);
+
+  // boda.ics vive junto al index.html; iOS lo abre en Calendario
+  const enlaceApple = "boda.ics";
+
+  const esApple = /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent) ||
+                  (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+  const velo = document.getElementById("velo");
+  const contOpciones = document.getElementById("opciones-cal");
+
+  function opcion(texto, href, principal) {
+    const a = document.createElement("a");
+    a.className = "boton" + (principal ? " boton--solido" : "");
+    a.href = href;
+    a.textContent = texto;
+    if (href.startsWith("http")) { a.target = "_blank"; a.rel = "noopener noreferrer"; }
+    a.addEventListener("click", () => { cerrarHoja(); mostrarAviso("Abriendo tu calendario"); });
+    return a;
+  }
+
+  // El calendario propio del dispositivo va de primero
+  const opciones = esApple
+    ? [opcion("Calendario de Apple", enlaceApple, true),
+       opcion("Google Calendar", enlaceGoogle, false),
+       opcion("Outlook", enlaceOutlook, false)]
+    : [opcion("Google Calendar", enlaceGoogle, true),
+       opcion("Calendario de Apple", enlaceApple, false),
+       opcion("Outlook", enlaceOutlook, false)];
+
+  opciones.forEach(o => contOpciones.appendChild(o));
+
+  function abrirHoja(){ velo.classList.add("abierto"); }
+  function cerrarHoja(){ velo.classList.remove("abierto"); }
+
+  document.getElementById("calendario").addEventListener("click", abrirHoja);
+  document.getElementById("cerrar-cal").addEventListener("click", cerrarHoja);
+  velo.addEventListener("click", e => { if (e.target === velo) cerrarHoja(); });
+
+  /* ============================================================
+     7. COPIAR DIRECCIÓN
+     ============================================================ */
+  document.getElementById("copiar").addEventListener("click", async () => {
+    const direccion = "Iglesia Apostólica de Jesucristo, Cra. 70c #65-63, Bogotá";
+    try {
+      await navigator.clipboard.writeText(direccion);
+      mostrarAviso("Dirección copiada");
+    } catch {
+      const campo = document.createElement("textarea");
+      campo.value = direccion;
+      campo.setAttribute("readonly", "");
+      campo.style.position = "absolute";
+      campo.style.left = "-9999px";
+      document.body.appendChild(campo);
+      campo.select();
+      document.execCommand("copy");
+      document.body.removeChild(campo);
+      mostrarAviso("Dirección copiada");
+    }
+  });
+
+  /* ============================================================
+     8. COMPARTIR
+     ============================================================ */
+  document.getElementById("compartir").addEventListener("click", async () => {
+    const texto = "Nos casamos el 21 de noviembre de 2026. Aquí está nuestra invitación:";
+    if (navigator.share) {
+      try { await navigator.share({ title: "Nuestra boda", text: texto, url: SITIO }); }
+      catch { /* el usuario cerró el menú */ }
+      return;
+    }
+    window.open("https://wa.me/?text=" + encodeURIComponent(texto + " " + SITIO), "_blank", "noopener");
+  });
 })();
 </script>
 </body>
