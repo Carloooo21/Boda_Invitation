@@ -1,0 +1,21 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Invitacion Boda//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:boda-21-11-2026@carloooo21.github.io
+DTSTAMP:20260902T000000Z
+DTSTART:20261121T220000Z
+DTEND:20261122T010000Z
+SUMMARY:Nuestra boda
+LOCATION:Iglesia Apostolica de Jesucristo, Cra. 70c #65-63, Bogota
+DESCRIPTION:Ceremonia a las 5:00 p. m. Codigo de vestimenta: formal / elegante. Invitacion: https://carloooo21.github.io/Boda_Invitation/
+URL:https://carloooo21.github.io/Boda_Invitation/
+BEGIN:VALARM
+TRIGGER:-P1D
+ACTION:DISPLAY
+DESCRIPTION:Manana es la boda
+END:VALARM
+END:VEVENT
+END:VCALENDAR
