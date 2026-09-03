@@ -7,17 +7,6 @@
 <meta name="description" content="Invitación a nuestra boda. 21 de noviembre de 2026, Iglesia Apostólica de Jesucristo, Bogotá." />
 <meta name="theme-color" content="#F4EEE1" />
 
-<!-- ============================================================
-     ARCHIVOS QUE VAN EN LA MISMA CARPETA QUE ESTE index.html
-       · foto_boda.jpeg   imagen de la portada
-       · musica.mp3       audio de fondo (bucle de 0:58 a 1:35)
-       · boda.ics         evento para Calendario de Apple
-
-     Las flores están dibujadas en SVG dentro de este archivo:
-     calas vinotinto, orquídeas cymbidium burdeos, anturios verdes,
-     amaranto colgante, hortensia verde y hoja de monstera.
-     ============================================================ -->
-
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&display=swap" rel="stylesheet" />
@@ -342,38 +331,58 @@ body{
 
 .arreglo{
   position: absolute;
-  /* En celular no deben invadir el centro del panel, donde viven
-     los botones: por eso el tope es bajo y salen más hacia afuera. */
-  width: clamp(86px, 29%, 140px); height: auto;
-  filter: drop-shadow(0 5px 12px rgba(60,7,24,.28));
+  /* Presencia amplia y visibilidad mejorada hacia adentro */
+  width: clamp(140px, 46%, 220px); height: auto;
+  filter: drop-shadow(0 6px 14px rgba(60,7,24,.32)) saturate(1.08);
   transition: transform 900ms var(--curva);
 }
-.arreglo--si{ top: -7%;    left: -13%; }
-.arreglo--sd{ top: -7%;    right: -13%; transform: scaleX(-1); }
-.arreglo--ii{ bottom: -8%; left: -14%;  transform: scaleY(-1); }
-.arreglo--id{ bottom: -8%; right: -14%; transform: rotate(180deg); }
+.arreglo--si{ top: -3%;    left: -6%; }
+.arreglo--sd{ top: -3%;    right: -6%; transform: scaleX(-1); }
+.arreglo--ii{ bottom: -3%; left: -6%;  transform: scaleY(-1); }
+.arreglo--id{ bottom: -3%; right: -6%; transform: rotate(180deg); }
 
-/* Los dos ramos de abajo se quedan más cortos: ahí está el botón
-   principal de cada vista. */
-.arreglo--ii, .arreglo--id{ width: clamp(76px, 25%, 120px); }
+/* Costados, a media altura */
+.arreglo--li{
+  top: 35%; left: -12%;
+  width: clamp(110px, 36%, 170px);
+  transform: rotate(-96deg);
+  opacity: .96;
+}
+.arreglo--ld{
+  top: 31%; right: -12%;
+  width: clamp(110px, 36%, 170px);
+  transform: rotate(96deg) scaleY(-1);
+  opacity: .96;
+}
+
+/* Los dos ramos de abajo más grandes y expuestos */
+.arreglo--ii, .arreglo--id{ width: clamp(130px, 42%, 195px); }
 
 /* Empuje del follaje cuando cambia la vista: refuerza la profundidad */
 .jardin.pulso .arreglo--si{ transform: scale(1.045) translate(-4px, -4px); }
 .jardin.pulso .arreglo--sd{ transform: scaleX(-1) scale(1.045) translate(-4px, -4px); }
 .jardin.pulso .arreglo--ii{ transform: scaleY(-1) scale(1.045) translate(-4px, -4px); }
 .jardin.pulso .arreglo--id{ transform: rotate(180deg) scale(1.045) translate(-4px, -4px); }
+.jardin.pulso .arreglo--li{ transform: rotate(-96deg) scale(1.05) translate(-4px, 0); }
+.jardin.pulso .arreglo--ld{ transform: rotate(96deg) scaleY(-1) scale(1.05) translate(-4px, 0); }
 
 .guirnalda{
-  position: absolute; top: -3%;
-  width: clamp(44px, 14%, 72px); height: auto;
-  filter: drop-shadow(0 4px 9px rgba(60,7,24,.25));
+  position: absolute; top: -1%;
+  width: clamp(68px, 22%, 110px); height: auto;
+  filter: drop-shadow(0 5px 10px rgba(60,7,24,.28)) saturate(1.08);
 }
-.guirnalda--a{ left: 30%; }
-.guirnalda--b{ right: 28%; transform: scaleX(-1); }
+.guirnalda--a{ left: 24%; }
+.guirnalda--b{ right: 22%; transform: scaleX(-1); }
+.guirnalda--c{
+  left: 47%; top: -3%;
+  width: clamp(52px, 16%, 82px);
+  opacity: .9;
+}
 
 @media (prefers-reduced-motion: no-preference){
   .guirnalda--a{ transform-origin: top center; animation: mecer 8s ease-in-out infinite; }
   .guirnalda--b{ transform-origin: top center; animation: mecer-esp 9s ease-in-out infinite; }
+  .guirnalda--c{ transform-origin: top center; animation: mecer 11s ease-in-out infinite; animation-delay: -4s; }
   @keyframes mecer{
     0%,100%{ transform: rotate(-1.6deg); }
     50%    { transform: rotate(1.6deg); }
@@ -490,20 +499,42 @@ body{
 /* ============================================================
    12. PANTALLAS BAJAS
    ============================================================ */
-/* Celulares angostos: los ramos se retiran a las esquinas para que
-   nunca se crucen con el botón central. */
+/* Celulares: flores ajustadas y los botones se sobreponen */
 @media (max-width: 430px){
-  .arreglo{ width: clamp(72px, 24%, 105px); }
-  .arreglo--ii, .arreglo--id{ width: clamp(64px, 21%, 92px); }
-  .guirnalda{ width: clamp(30px, 10%, 46px); }
+  .arreglo{ width: clamp(130px, 42%, 180px); }
+  .arreglo--ii, .arreglo--id{ width: clamp(120px, 38%, 160px); }
+  .arreglo--li, .arreglo--ld{ width: clamp(95px, 30%, 135px); }
+  .guirnalda{ width: clamp(58px, 19%, 88px); }
+
+  .arreglo--si{ top: -2%; left: -5%; }
+  .arreglo--sd{ top: -2%; right: -5%; }
+  .arreglo--ii{ bottom: -2%; left: -5%; }
+  .arreglo--id{ bottom: -2%; right: -5%; }
+
+  /* Mantiene las flores visibles en el fondo mientras los botones toman prioridad sobrepuesta */
+  .jardin{ z-index: 1; }
+  .boton, .acciones, .nav{ position: relative; z-index: 10; }
+
+  /* El contenido se levanta un poco */
+  .panel{ padding-bottom: 3rem; }
+  .panel--foto{ padding-bottom: 3.4rem; }
+}
+
+/* Computador: marco floral completo */
+@media (min-width: 700px) and (min-height: 720px){
+  .arreglo{ width: clamp(170px, 58%, 250px); }
+  .arreglo--ii, .arreglo--id{ width: clamp(150px, 50%, 215px); }
+  .arreglo--li, .arreglo--ld{ width: clamp(120px, 40%, 175px); }
+  .guirnalda{ width: clamp(76px, 24%, 118px); }
 }
 
 @media (max-height: 700px){
   .paso{ padding: 22px 18px; }
   .panel{ gap: .45rem; }
-  .arreglo{ width: clamp(74px, 25%, 112px); }
-  .arreglo--ii, .arreglo--id{ width: clamp(66px, 22%, 96px); }
-  .guirnalda{ width: clamp(34px, 11%, 52px); }
+  .arreglo{ width: clamp(120px, 38%, 160px); }
+  .arreglo--ii, .arreglo--id{ width: clamp(110px, 34%, 145px); }
+  .arreglo--li, .arreglo--ld{ width: clamp(88px, 28%, 120px); }
+  .guirnalda{ width: clamp(54px, 18%, 78px); }
   .cuenta__bloque{ padding: .5rem .15rem; }
 }
 @media (max-height: 590px){
@@ -512,8 +543,9 @@ body{
   .texto{ line-height: 1.45; }
   .nota{ padding: .5rem .7rem; line-height: 1.4; }
   .boton{ min-height: 38px; padding: .5rem 1.4rem; }
-  .arreglo{ width: clamp(64px, 21%, 92px); }
-  .arreglo--ii, .arreglo--id{ width: clamp(58px, 19%, 80px); }
+  .arreglo{ width: clamp(105px, 32%, 135px); }
+  .arreglo--ii, .arreglo--id{ width: clamp(95px, 29%, 120px); }
+  .arreglo--li, .arreglo--ld{ width: clamp(78px, 24%, 102px); }
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -526,18 +558,10 @@ body{
 
 <body>
 
-<!-- Audio sin autoplay: arranca con el botón, en bucle de 0:58 a 1:35 -->
 <audio id="musica" src="musica.mp3" preload="metadata"></audio>
 
-<!-- ============================================================
-     BIBLIOTECA FLORAL
-     Cada flor se construye con degradados, nervaduras y brillos
-     para dar volumen. No hay flores blancas: la paleta es
-     vinotinto y verde, como en la fotografía de referencia.
-     ============================================================ -->
 <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
   <defs>
-    <!-- ---------- Degradados ---------- -->
     <radialGradient id="gCalaOut" cx="35%" cy="28%" r="78%">
       <stop offset="0%"   stop-color="#B92E58"/>
       <stop offset="45%"  stop-color="#7C1234"/>
@@ -585,36 +609,28 @@ body{
       <stop offset="100%" stop-color="#48611F"/>
     </linearGradient>
 
-    <!-- ---------- CALA VINOTINTO ---------- -->
     <g id="cala">
       <path d="M1 44 C5 62 8 78 11 94" stroke="url(#gTallo)" stroke-width="5"
             stroke-linecap="round" fill="none"/>
-      <!-- espata: contorno enrollado con punta caída -->
       <path d="M0 46 C-9 27 -20 10 -28 -9 C-37 -30 -25 -49 -3 -51
                C17 -53 31 -38 28 -19 C25 -1 12 13 5 25 C1 32 0 39 0 46 Z"
             fill="url(#gCalaOut)"/>
-      <!-- garganta -->
       <path d="M-2 27 C-13 9 -22 -8 -22 -24 C-22 -39 -11 -46 0 -44
                C13 -42 20 -30 16 -17 C12 -2 3 15 -2 27 Z"
             fill="url(#gCalaIn)"/>
-      <!-- borde superior enrollado -->
       <path d="M-3 -51 C17 -53 31 -38 28 -19"
             stroke="#C8467A" stroke-width="2.4" fill="none" opacity=".5" stroke-linecap="round"/>
-      <!-- nervaduras -->
       <g stroke="#5A0D24" stroke-width=".9" fill="none" opacity=".45">
         <path d="M-6 30 C-14 12 -20 -6 -19 -24"/>
         <path d="M2 30 C-2 12 -4 -8 -2 -26"/>
         <path d="M9 26 C10 10 12 -8 12 -22"/>
       </g>
-      <!-- espádice -->
       <path d="M-4 21 C-7 6 -9 -12 -8 -29" stroke="url(#gEspadice)" stroke-width="4.4"
             stroke-linecap="round" fill="none"/>
-      <!-- brillo satinado -->
       <path d="M9 -38 C20 -33 25 -21 22 -10" stroke="#DE7BA0" stroke-width="3"
             opacity=".28" fill="none" stroke-linecap="round"/>
     </g>
 
-    <!-- ---------- ORQUÍDEA CYMBIDIUM ---------- -->
     <g id="cym-petalo">
       <path d="M0 -1 C10 -13 12 -31 0 -46 C-12 -31 -10 -13 0 -1 Z" fill="url(#gCymPetalo)"/>
       <g stroke="#4A0A1D" stroke-width=".8" fill="none" opacity=".5">
@@ -632,7 +648,6 @@ body{
       <use href="#cym-petalo" transform="rotate(144)"/>
       <use href="#cym-petalo" transform="rotate(216)"/>
       <use href="#cym-petalo" transform="rotate(288)"/>
-      <!-- labelo crema moteado, la firma de la cymbidium -->
       <path d="M-9 1 C-12 12 -6 21 0 21 C6 21 12 12 9 1 C5 -3 -5 -3 -9 1 Z"
             fill="url(#gLabelo)"/>
       <g fill="#75122F">
@@ -646,7 +661,6 @@ body{
       <path d="M-4 -2 C-4 -7 4 -7 4 -2 C4 2 -4 2 -4 -2 Z" fill="#E7CFA4"/>
     </g>
 
-    <!-- ---------- ANTURIO VERDE ---------- -->
     <g id="anturio">
       <path d="M0 38 C-28 19 -37 -8 -20 -27 C-9 -39 3 -35 7 -25
                C11 -35 25 -39 35 -27 C50 -8 28 19 0 38 Z"
@@ -664,7 +678,6 @@ body{
             opacity=".35" fill="none" stroke-linecap="round"/>
     </g>
 
-    <!-- ---------- HORTENSIA VERDE ---------- -->
     <g id="hortensia" fill="url(#gHortensia)">
       <circle cx="0" cy="0" r="7.4"/><circle cx="13" cy="-4" r="6.6"/>
       <circle cx="-13" cy="-3" r="6.8"/><circle cx="7" cy="11" r="6.4"/>
@@ -674,7 +687,6 @@ body{
       <circle cx="-2" cy="19" r="4.8"/>
     </g>
 
-    <!-- ---------- AMARANTO COLGANTE ---------- -->
     <g id="amaranto">
       <path d="M0 0 C8 22 -5 42 3 64 C11 85 -3 101 5 122"
             stroke="url(#gAmaranto)" stroke-width="8.5" stroke-linecap="round" fill="none"/>
@@ -693,10 +705,8 @@ body{
       </g>
     </g>
 
-    <!-- ---------- HOJAS ---------- -->
     <path id="hoja" d="M0 0 C13 -21 34 -28 46 -26 C45 -10 27 8 0 0 Z" fill="url(#gHoja)"/>
 
-    <!-- Monstera: hoja grande con cortes -->
     <g id="monstera">
       <path d="M0 0 C6 -34 34 -56 62 -54 C70 -26 52 6 0 0 Z" fill="url(#gHoja)"/>
       <g stroke="#2F421A" stroke-width="3.4" stroke-linecap="round" opacity=".85">
@@ -708,11 +718,7 @@ body{
             fill="none" opacity=".55"/>
     </g>
 
-    <!-- ============================================================
-         ARREGLO DE ESQUINA
-         ============================================================ -->
     <g id="arreglo">
-      <!-- follaje de fondo -->
       <use href="#monstera" transform="translate(8 66) rotate(-14) scale(.9)" opacity=".92"/>
       <use href="#hoja" transform="translate(128 30) rotate(12)"/>
       <use href="#hoja" transform="translate(156 80) rotate(64)"/>
@@ -720,30 +726,24 @@ body{
       <use href="#hoja" transform="translate(86 14) rotate(-30)" opacity=".9"/>
       <use href="#hoja" transform="translate(160 130) rotate(80)" opacity=".85"/>
 
-      <!-- hortensias verdes -->
       <use href="#hortensia" transform="translate(134 54) scale(1)"/>
       <use href="#hortensia" transform="translate(38 112) scale(.82)"/>
 
-      <!-- amaranto colgando -->
       <use href="#amaranto" transform="translate(100 84) rotate(5) scale(.8)"/>
       <use href="#amaranto" transform="translate(152 92) rotate(-9) scale(.62)"/>
       <use href="#amaranto" transform="translate(72 96) rotate(12) scale(.5)" opacity=".9"/>
 
-      <!-- anturio verde -->
       <use href="#anturio" transform="translate(30 58) rotate(-16) scale(.82)"/>
 
-      <!-- calas -->
       <use href="#cala" transform="translate(70 58) rotate(-26) scale(1)"/>
       <use href="#cala" transform="translate(140 100) rotate(30) scale(.74)"/>
       <use href="#cala" transform="translate(24 116) rotate(-52) scale(.6)"/>
 
-      <!-- orquídeas cymbidium -->
       <use href="#cymbidium" transform="translate(108 44) scale(.95)"/>
       <use href="#cymbidium" transform="translate(52 104) scale(.76)"/>
       <use href="#cymbidium" transform="translate(150 66) scale(.6)"/>
     </g>
 
-    <!-- Guirnalda de amaranto para el borde superior -->
     <g id="guirnalda-am">
       <use href="#hoja" transform="translate(32 12) rotate(44) scale(.72)"/>
       <use href="#hortensia" transform="translate(30 18) scale(.68)"/>
@@ -756,7 +756,6 @@ body{
 
 <main class="escenario" id="escenario" data-paso="1">
 
-  <!-- ---------- PASO 1 · PORTADA ---------- -->
   <section class="paso activo" id="paso-1" aria-label="Portada">
     <div class="panel panel--foto">
       <h1 class="portada__script">Nos casamos</h1>
@@ -771,7 +770,6 @@ body{
     </div>
   </section>
 
-  <!-- ---------- PASO 2 · CUENTA REGRESIVA ---------- -->
   <section class="paso" id="paso-2" aria-label="Cuenta regresiva" aria-hidden="true">
     <div class="panel">
       <h1 class="titulo">Falta poco</h1>
@@ -802,7 +800,6 @@ body{
     </div>
   </section>
 
-  <!-- ---------- PASO 3 · LUGAR Y FECHA ---------- -->
   <section class="paso" id="paso-3" aria-label="Lugar y fecha" aria-hidden="true">
     <div class="panel">
       <h1 class="titulo">Dónde y cuándo</h1>
@@ -838,7 +835,6 @@ body{
     </div>
   </section>
 
-  <!-- ---------- PASO 4 · VESTIMENTA Y CONFIRMACIÓN ---------- -->
   <section class="paso" id="paso-4" aria-label="Vestimenta y confirmación" aria-hidden="true">
     <div class="panel">
       <h1 class="titulo">Para acompañarnos</h1>
@@ -873,14 +869,18 @@ body{
     </div>
   </section>
 
-  <!-- ---------- FLORES ---------- -->
   <div class="jardin" id="jardin" aria-hidden="true">
     <svg class="arreglo arreglo--si" viewBox="0 0 200 175"><use href="#arreglo"/></svg>
     <svg class="arreglo arreglo--sd" viewBox="0 0 200 175"><use href="#arreglo"/></svg>
     <svg class="arreglo arreglo--ii" viewBox="0 0 200 175"><use href="#arreglo"/></svg>
     <svg class="arreglo arreglo--id" viewBox="0 0 200 175"><use href="#arreglo"/></svg>
+
+    <svg class="arreglo arreglo--li" viewBox="0 0 200 175"><use href="#arreglo"/></svg>
+    <svg class="arreglo arreglo--ld" viewBox="0 0 200 175"><use href="#arreglo"/></svg>
+
     <svg class="guirnalda guirnalda--a" viewBox="0 0 85 155"><use href="#guirnalda-am"/></svg>
     <svg class="guirnalda guirnalda--b" viewBox="0 0 85 155"><use href="#guirnalda-am"/></svg>
+    <svg class="guirnalda guirnalda--c" viewBox="0 0 85 155"><use href="#guirnalda-am"/></svg>
   </div>
 
   <div class="petalos" id="petalos" aria-hidden="true"></div>
@@ -900,7 +900,6 @@ body{
     </svg>
   </button>
 
-  <!-- ---------- HOJA DE CALENDARIO ---------- -->
   <div class="velo" id="velo">
     <div class="hoja" role="dialog" aria-modal="true" aria-label="Guardar la fecha">
       <p class="hoja__titulo">Guardar la fecha</p>
