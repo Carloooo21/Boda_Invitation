@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Nuestra boda · 21 de noviembre de 2026</title>
 <meta name="description" content="Invitación a nuestra boda. 21 de noviembre de 2026, Iglesia Apostólica de Jesucristo, Bogotá." />
-<meta name="theme-color" content="#140E16" />
+<meta name="theme-color" content="#F4EEE1" />
 
 <!-- ============================================================
      ARCHIVOS QUE VAN EN LA MISMA CARPETA QUE ESTE index.html
        · foto_boda.jpeg   imagen de la portada
-       · musica.mp3       audio de fondo (suena de 1:00 a 1:35)
+       · musica.mp3       audio de fondo (bucle de 0:58 a 1:35)
        · boda.ics         evento para Calendario de Apple
 
      Las flores están dibujadas en SVG dentro de este archivo:
@@ -72,7 +72,7 @@ html, body{
 }
 
 body{
-  background: #090610;
+  background: var(--panel);
   color: var(--tinta);
   font-family: var(--serif);
   font-weight: 300;
@@ -91,13 +91,14 @@ body{
   width:  min(100vw, 430px);
   height: min(100dvh, 780px);
   overflow: hidden;
-  background: radial-gradient(120% 85% at 50% 0%, var(--noche-suave), var(--noche) 62%);
+  background:
+    radial-gradient(120% 85% at 50% 0%, var(--panel-alto), var(--panel) 65%);
   perspective: 1300px;            /* habilita la profundidad de las transiciones */
   perspective-origin: 50% 45%;
 }
 
 @media (min-width: 700px) and (min-height: 720px){
-  .escenario{ box-shadow: 0 26px 80px rgba(0,0,0,.6); }
+  .escenario{ box-shadow: 0 20px 60px rgba(107,15,46,.18); }
 }
 
 /* ============================================================
@@ -160,8 +161,7 @@ body{
   padding: clamp(1.1rem, 4.5%, 1.9rem) clamp(1rem, 5%, 1.7rem);
   text-align: center;
   overflow: hidden;
-  background: var(--panel);
-  box-shadow: 0 14px 40px rgba(0,0,0,.55);
+  background: transparent;
 }
 
 .panel::after{
@@ -342,14 +342,20 @@ body{
 
 .arreglo{
   position: absolute;
-  width: clamp(160px, 56%, 250px); height: auto;
-  filter: drop-shadow(0 8px 16px rgba(0,0,0,.6));
+  /* En celular no deben invadir el centro del panel, donde viven
+     los botones: por eso el tope es bajo y salen más hacia afuera. */
+  width: clamp(86px, 29%, 140px); height: auto;
+  filter: drop-shadow(0 5px 12px rgba(60,7,24,.28));
   transition: transform 900ms var(--curva);
 }
-.arreglo--si{ top: -4%;    left: -13%; }
-.arreglo--sd{ top: -4%;    right: -13%; transform: scaleX(-1); }
-.arreglo--ii{ bottom: -4%; left: -13%;  transform: scaleY(-1); }
-.arreglo--id{ bottom: -4%; right: -13%; transform: rotate(180deg); }
+.arreglo--si{ top: -7%;    left: -13%; }
+.arreglo--sd{ top: -7%;    right: -13%; transform: scaleX(-1); }
+.arreglo--ii{ bottom: -8%; left: -14%;  transform: scaleY(-1); }
+.arreglo--id{ bottom: -8%; right: -14%; transform: rotate(180deg); }
+
+/* Los dos ramos de abajo se quedan más cortos: ahí está el botón
+   principal de cada vista. */
+.arreglo--ii, .arreglo--id{ width: clamp(76px, 25%, 120px); }
 
 /* Empuje del follaje cuando cambia la vista: refuerza la profundidad */
 .jardin.pulso .arreglo--si{ transform: scale(1.045) translate(-4px, -4px); }
@@ -359,11 +365,11 @@ body{
 
 .guirnalda{
   position: absolute; top: -3%;
-  width: clamp(72px, 23%, 116px); height: auto;
-  filter: drop-shadow(0 6px 12px rgba(0,0,0,.5));
+  width: clamp(44px, 14%, 72px); height: auto;
+  filter: drop-shadow(0 4px 9px rgba(60,7,24,.25));
 }
-.guirnalda--a{ left: 24%; }
-.guirnalda--b{ right: 22%; transform: scaleX(-1); }
+.guirnalda--a{ left: 30%; }
+.guirnalda--b{ right: 28%; transform: scaleX(-1); }
 
 @media (prefers-reduced-motion: no-preference){
   .guirnalda--a{ transform-origin: top center; animation: mecer 8s ease-in-out infinite; }
@@ -418,10 +424,10 @@ body{
 }
 .progreso__punto::before{
   content: ""; width: 6px; height: 6px; border-radius: 50%;
-  border: 1px solid var(--lima-clara); background: transparent; opacity: .5;
+  border: 1px solid var(--vino); background: transparent; opacity: .45;
   transition: opacity 320ms ease, background-color 320ms ease, transform 420ms var(--curva);
 }
-.progreso__punto.activo::before{ background: var(--lima); opacity: 1; transform: scale(1.45); }
+.progreso__punto.activo::before{ background: var(--vino); opacity: 1; transform: scale(1.45); }
 
 .audio-btn{
   position: absolute;
@@ -429,9 +435,9 @@ body{
   bottom: calc(env(safe-area-inset-bottom) + .7rem);
   z-index: 12; width: 34px; height: 34px;
   display: none; align-items: center; justify-content: center; padding: 0;
-  border: 1px solid rgba(203,222,121,.5); border-radius: 50%;
-  background: rgba(20,14,22,.6); backdrop-filter: blur(6px);
-  color: var(--lima-clara); cursor: pointer; opacity: .7;
+  border: 1px solid rgba(107,15,46,.35); border-radius: 50%;
+  background: rgba(251,246,236,.8); backdrop-filter: blur(6px);
+  color: var(--vino); cursor: pointer; opacity: .75;
   transition: opacity 250ms ease, transform 250ms var(--curva);
 }
 .audio-btn.visible{ display: flex; }
@@ -484,11 +490,20 @@ body{
 /* ============================================================
    12. PANTALLAS BAJAS
    ============================================================ */
+/* Celulares angostos: los ramos se retiran a las esquinas para que
+   nunca se crucen con el botón central. */
+@media (max-width: 430px){
+  .arreglo{ width: clamp(72px, 24%, 105px); }
+  .arreglo--ii, .arreglo--id{ width: clamp(64px, 21%, 92px); }
+  .guirnalda{ width: clamp(30px, 10%, 46px); }
+}
+
 @media (max-height: 700px){
   .paso{ padding: 22px 18px; }
   .panel{ gap: .45rem; }
-  .arreglo{ width: clamp(130px, 46%, 190px); }
-  .guirnalda{ width: clamp(58px, 19%, 90px); }
+  .arreglo{ width: clamp(74px, 25%, 112px); }
+  .arreglo--ii, .arreglo--id{ width: clamp(66px, 22%, 96px); }
+  .guirnalda{ width: clamp(34px, 11%, 52px); }
   .cuenta__bloque{ padding: .5rem .15rem; }
 }
 @media (max-height: 590px){
@@ -497,7 +512,8 @@ body{
   .texto{ line-height: 1.45; }
   .nota{ padding: .5rem .7rem; line-height: 1.4; }
   .boton{ min-height: 38px; padding: .5rem 1.4rem; }
-  .arreglo{ width: clamp(105px, 38%, 145px); }
+  .arreglo{ width: clamp(64px, 21%, 92px); }
+  .arreglo--ii, .arreglo--id{ width: clamp(58px, 19%, 80px); }
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -510,7 +526,7 @@ body{
 
 <body>
 
-<!-- Audio sin autoplay: arranca con el botón, de 1:00 a 1:35 -->
+<!-- Audio sin autoplay: arranca con el botón, en bucle de 0:58 a 1:35 -->
 <audio id="musica" src="musica.mp3" preload="metadata"></audio>
 
 <!-- ============================================================
@@ -979,9 +995,17 @@ body{
   }, { passive: true });
 
   /* ============================================================
-     2. AUDIO · fragmento 1:00 a 1:35
+     2. AUDIO · fragmento 0:58 a 1:35, en bucle y con desvanecidos
+     El volumen no se maneja con temporizadores sueltos sino como
+     una función del tiempo de la canción: sube durante los primeros
+     segundos, se mantiene y baja justo antes del corte. Un bucle de
+     animación la evalúa muchas veces por segundo, así que el cambio
+     se oye continuo y no a saltos.
      ============================================================ */
-  const INICIO = 60, FIN = 95;
+  const INICIO  = 58;    // 0:58
+  const FIN     = 95;    // 1:35
+  const SUBIDA  = 4;     // segundos que tarda en entrar
+  const BAJADA  = 2.5;   // segundos que tarda en salir antes del corte
 
   const musica     = document.getElementById("musica");
   const botonAbrir = document.getElementById("abrir");
@@ -998,7 +1022,35 @@ body{
     botonAudio.title = etiqueta;
   }
 
-  // Saltar a 1:00 exige que el navegador conozca ya la duración del archivo
+  // Curva de volumen: 0 en los extremos del fragmento, 1 en el centro
+  function volumenPara(t) {
+    const entra = Math.min(1, Math.max(0, (t - INICIO) / SUBIDA));
+    const sale  = Math.min(1, Math.max(0, (FIN - t) / BAJADA));
+    return Math.min(entra, sale);
+  }
+
+  let cuadro = null;
+
+  function vigilar() {
+    if (musica.paused) { cuadro = null; return; }
+
+    const t = musica.currentTime;
+
+    if (t >= FIN) {
+      // Se repite: vuelve al 0:58 y entra otra vez en suave
+      musica.volume = 0;
+      musica.currentTime = INICIO;
+    } else if (t < INICIO - 0.5) {
+      musica.currentTime = INICIO;
+    } else {
+      musica.volume = volumenPara(t);
+    }
+
+    cuadro = requestAnimationFrame(vigilar);
+  }
+
+  // Colocar el cabezal en 0:58 exige que el navegador conozca ya la
+  // duración del archivo; si aún no la tiene, se espera a los metadatos.
   function ubicarEnInicio(despues) {
     if (musica.readyState > 0) { musica.currentTime = INICIO; despues(); }
     else {
@@ -1011,12 +1063,23 @@ body{
 
   function reproducir() {
     const arrancar = () => {
+      musica.volume = 0;                     // nunca entra de golpe
       const intento = musica.play();
       if (intento && typeof intento.catch === "function") intento.catch(() => pintarIcono(false));
     };
     if (musica.currentTime < INICIO || musica.currentTime >= FIN - 0.05) ubicarEnInicio(arrancar);
     else arrancar();
   }
+
+  musica.addEventListener("play", () => {
+    pintarIcono(true);
+    if (!cuadro) cuadro = requestAnimationFrame(vigilar);
+  });
+
+  musica.addEventListener("pause", () => {
+    pintarIcono(false);
+    if (cuadro) { cancelAnimationFrame(cuadro); cuadro = null; }
+  });
 
   botonAbrir.addEventListener("click", () => {
     reproducir();
@@ -1025,16 +1088,6 @@ body{
     irA(2);
   });
 
-  musica.addEventListener("timeupdate", () => {
-    if (musica.currentTime >= FIN) {
-      musica.pause();
-      musica.currentTime = FIN;
-      pintarIcono(false);
-    }
-  });
-
-  musica.addEventListener("play",  () => pintarIcono(true));
-  musica.addEventListener("pause", () => pintarIcono(false));
   botonAudio.addEventListener("click", () => { musica.paused ? reproducir() : musica.pause(); });
 
   /* ============================================================
