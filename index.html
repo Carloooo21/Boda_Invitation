@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Nuestra boda · 21 de noviembre de 2026</title>
+<meta name="description" content="Invitación a nuestra boda. 21 de noviembre de 2026, Iglesia Apostólica de Jesucristo, Bogotá." />
+<meta name="theme-color" content="#FAF5EC" />
+
+<!-- ============================================================
+     ARCHIVOS QUE DEBEN QUEDAR EN LA MISMA CARPETA QUE ESTE index.html
+       · foto_boda.jpeg   (imagen de la portada)
+       · musica.mp3       (audio de fondo, se corta en 1:35)
+     Las flores NO son imágenes: están dibujadas en SVG dentro de
+     este mismo archivo, así que no hay nada más que subir.
+     ============================================================ -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&display=swap" rel="stylesheet" />
+
+<style>
+/* ============================================================
+   1. TOKENS DE DISEÑO
+   Paleta tomada de las referencias: papel marfil, vino profundo,
+   rosa antiguo, verde salvia y un dorado apagado para las líneas.
+   ============================================================ */
+:root{
+  --marfil:      #FAF5EC;
+  --marfil-alto: #FFFDF8;
+  --vino:        #7B1E33;
+  --vino-oscuro: #5C1526;
+  --vino-claro:  #A63A50;
+  --rosa-viejo:  #C98495;
+  --salvia:      #7E9070;
+  --salvia-clara:#A8B99A;
+  --oro:         #B08D4F;
+  --oro-claro:   #E3D3B0;
+  --tinta:       #3A2C2A;
+  --tinta-suave: #7A6863;
+
+  --serif:  "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --script: "Great Vibes", "Cormorant Garamond", cursive;
+
+  /* Escala tipográfica fluida (mobile-first) */
+  --t-xs: clamp(.66rem, .62rem + .2vw, .74rem);
+  --t-sm: clamp(.84rem, .80rem + .25vw, .94rem);
+  --t-md: clamp(1rem, .94rem + .4vw, 1.14rem);
+  --t-lg: clamp(1.5rem, 1.3rem + 1.1vw, 1.95rem);
+  --t-xl: clamp(2.2rem, 1.8rem + 2.4vw, 2.9rem);
+
+  --transicion: 620ms cubic-bezier(.22,.61,.36,1);
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+
+html, body{
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  /* CERO SCROLL: ni vertical ni horizontal */
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+body{
+  /* Fondo del escritorio: la tarjeta reposa sobre él */
+  background: #EDE4D6;
+  color: var(--tinta);
+  font-family: var(--serif);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:focus-visible{
+  outline: 2px solid var(--vino);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ============================================================
+   2. ESCENARIO Y VISTAS
+   Cada paso ocupa la pantalla completa y se superpone al anterior.
+   ============================================================ */
+.escenario{
+  position: relative;
+
+  /* En móvil ocupa toda la pantalla.
+     En portátil y escritorio se limita al formato de una tarjeta
+     vertical, así la foto no se estira a todo el monitor. */
+  width:  min(100vw, 430px);
+  height: min(100dvh, 760px);
+
+  overflow: hidden;
+  /* textura de papel muy sutil */
+  background:
+    radial-gradient(circle at 30% 20%, rgba(255,255,255,.6), transparent 60%),
+    var(--marfil);
+}
+
+/* La tarjeta se despega del fondo solo cuando sobra espacio alrededor */
+@media (min-width: 700px) and (min-height: 700px){
+  .escenario{ box-shadow: 0 18px 60px rgba(58,44,42,.28); }
+}
+
+.paso{
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(.9rem, 2.6vh, 1.9rem);
+  padding: calc(env(safe-area-inset-top) + 3rem) clamp(1.5rem, 8%, 2.6rem) calc(env(safe-area-inset-bottom) + 3.2rem);
+  text-align: center;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(18px);
+  transition: opacity var(--transicion), transform var(--transicion), visibility 0s linear var(--transicion);
+  pointer-events: none;
+
+  /* Nada se desplaza: el contenido se ajusta con la escala fluida
+     y con las reglas de pantallas bajas del final de la hoja. */
+  overflow: hidden;
+}
+
+.paso.activo{
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  pointer-events: auto;
+  transition: opacity var(--transicion), transform var(--transicion), visibility 0s;
+}
+
+.paso.saliendo{ transform: translateY(-18px); }
+
+/* Marco dorado interior, como el filo impreso de una tarjeta */
+.marco{
+  position: absolute;
+  inset: clamp(10px, 3vw, 22px);
+  border: 1px solid var(--oro-claro);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.marco::after{
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgba(176,141,79,.28);
+}
+
+/* ============================================================
+   3. ORNAMENTOS FLORALES
+   Ramos en SVG en las esquinas opuestas, igual que en una
+   tarjeta impresa. No capturan clics.
+   ============================================================ */
+.ramo{
+  position: absolute;
+  width: clamp(130px, 42%, 200px);   /* proporcional a la tarjeta */
+  height: auto;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ramo--sup{ top: -6%;    left: -9%; }
+.ramo--inf{ bottom: -6%; right: -9%; transform: rotate(180deg); }
+
+/* En la portada las flores van sobre la foto y se refuerzan un poco */
+.portada .ramo{ filter: drop-shadow(0 2px 10px rgba(40,20,25,.35)); }
+
+/* ============================================================
+   4. PORTADA
+   ============================================================ */
+.portada{
+  background-color: #40222b;
+  background-image:
+    linear-gradient(180deg, rgba(45,22,29,.62) 0%, rgba(45,22,29,.34) 42%, rgba(45,22,29,.80) 100%),
+    url("foto_boda.jpeg");
+  background-size: cover;
+  background-position: center;
+  color: #FFF8EE;
+  justify-content: flex-end;
+}
+
+.portada .marco{ border-color: rgba(255,248,238,.45); }
+.portada .marco::after{ border-color: rgba(255,248,238,.22); }
+
+.portada__script{
+  font-family: var(--script);
+  font-size: var(--t-xl);
+  line-height: 1;
+  margin: 0;
+  color: #FFF1E2;
+  text-shadow: 0 2px 16px rgba(0,0,0,.4);
+}
+
+.portada__frase{
+  font-size: var(--t-md);
+  font-style: italic;
+  line-height: 1.7;
+  max-width: 30ch;
+  margin: 0 auto;
+  color: #FFF8EE;
+  text-shadow: 0 1px 14px rgba(0,0,0,.4);
+}
+
+.portada__fecha{
+  font-size: var(--t-sm);
+  letter-spacing: .38em;
+  margin: 0;
+  color: rgba(255,241,226,.9);
+}
+
+/* ============================================================
+   5. ELEMENTOS COMPARTIDOS
+   ============================================================ */
+.filete{
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  color: var(--oro);
+}
+
+.filete::before, .filete::after{
+  content: "";
+  width: 42px;
+  height: 1px;
+  background: currentColor;
+  opacity: .65;
+}
+
+.filete svg{ width: 13px; height: 13px; }
+
+.portada .filete{ color: rgba(255,241,226,.8); }
+
+.titulo{
+  font-family: var(--script);
+  font-size: var(--t-lg);
+  font-weight: 400;
+  line-height: 1.25;
+  margin: 0;
+  color: var(--vino);
+}
+
+.texto{
+  font-size: var(--t-md);
+  line-height: 1.75;
+  max-width: 33ch;
+  margin: 0 auto;
+  color: var(--tinta);
+}
+
+.texto--tenue{ color: var(--tinta-suave); font-style: italic; }
+
+.dato{ display: flex; flex-direction: column; gap: .2rem; }
+
+.dato__valor{
+  font-size: var(--t-md);
+  line-height: 1.45;
+  color: var(--tinta);
+}
+
+.dato__valor--grande{
+  font-size: var(--t-lg);
+  font-family: var(--serif);
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--vino);
+}
+
+.dato__nota{
+  font-size: var(--t-xs);
+  letter-spacing: .24em;
+  color: var(--tinta-suave);
+}
+
+.nota{
+  max-width: 33ch;
+  margin: 0 auto;
+  padding: .95rem 1.15rem;
+  border: 1px solid var(--oro-claro);
+  background: var(--marfil-alto);
+  font-size: var(--t-sm);
+  line-height: 1.65;
+  color: var(--tinta-suave);
+}
+
+/* ============================================================
+   6. BOTONES
+   ============================================================ */
+.boton{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: .8rem 2.2rem;
+  font-family: var(--serif);
+  font-size: var(--t-sm);
+  font-weight: 500;
+  letter-spacing: .2em;
+  text-decoration: none;
+  color: var(--vino);
+  background: transparent;
+  border: 1px solid var(--vino);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease;
+}
+
+.boton:hover{ background: var(--vino); color: #FFF8EE; }
+
+.boton--claro{ color: #FFF8EE; border-color: rgba(255,248,238,.75); }
+.boton--claro:hover{ background: #FFF8EE; color: var(--vino); }
+
+.boton--solido{ background: var(--vino); color: #FFF8EE; }
+.boton--solido:hover{ background: var(--vino-oscuro); border-color: var(--vino-oscuro); }
+
+.nav{
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: .3rem;
+  z-index: 4;
+}
+
+.nav__enlace{
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: .6rem .2rem;
+  font-family: var(--serif);
+  font-size: var(--t-xs);
+  letter-spacing: .26em;
+  color: var(--tinta-suave);
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition: color 250ms ease, border-color 250ms ease;
+}
+
+.nav__enlace:hover{ color: var(--vino); border-bottom-color: var(--vino); }
+
+/* Indicador de avance: los pasos sí son una secuencia */
+.progreso{
+  position: absolute;
+  bottom: calc(env(safe-area-inset-bottom) + 1.4rem);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: .55rem;
+  z-index: 5;
+}
+
+.progreso__punto{
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--vino);
+  opacity: .4;
+  transition: opacity 300ms ease, background-color 300ms ease;
+}
+
+.progreso__punto.activo{ background: var(--vino); opacity: 1; }
+
+.escenario[data-paso="1"] .progreso__punto{ border-color: rgba(255,248,238,.85); }
+.escenario[data-paso="1"] .progreso__punto.activo{ background: #FFF8EE; }
+
+/* ============================================================
+   7. CUENTA REGRESIVA
+   ============================================================ */
+.cuenta{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(56px, 1fr));
+  gap: clamp(.35rem, 2vw, 1.2rem);
+  width: min(430px, 100%);
+  z-index: 4;
+}
+
+.cuenta__bloque{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .3rem;
+  padding: .85rem .2rem;
+  background: rgba(255,253,248,.72);
+  border-top: 1px solid var(--oro-claro);
+  border-bottom: 1px solid var(--oro-claro);
+}
+
+.cuenta__numero{
+  font-size: clamp(1.7rem, 1.3rem + 2vw, 2.3rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--vino);
+}
+
+.cuenta__etiqueta{
+  font-size: var(--t-xs);
+  letter-spacing: .2em;
+  color: var(--tinta-suave);
+}
+
+/* ============================================================
+   8. BOTÓN FLOTANTE DE AUDIO
+   ============================================================ */
+.audio-btn{
+  /* Anclado a la esquina de la tarjeta, no de la ventana */
+  position: absolute;
+  right: calc(env(safe-area-inset-right) + 1.1rem);
+  bottom: calc(env(safe-area-inset-bottom) + 1.1rem);
+  z-index: 20;
+
+  width: 38px; height: 38px;
+  display: none;                      /* aparece al abrir la invitación */
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid var(--oro-claro);
+  border-radius: 50%;
+  background: rgba(255,253,248,.75);
+  backdrop-filter: blur(6px);
+  color: var(--vino);
+  cursor: pointer;
+  opacity: .62;
+  transition: opacity 250ms ease, transform 250ms ease;
+}
+
+.audio-btn.visible{ display: flex; }
+.audio-btn:hover{ opacity: 1; transform: scale(1.06); }
+.audio-btn svg{ width: 16px; height: 16px; }
+
+/* ============================================================
+   9. ACCESIBILIDAD Y PANTALLAS PEQUEÑAS
+   ============================================================ */
+@media (prefers-reduced-motion: reduce){
+  .paso{ transition-duration: 1ms; transform: none; }
+  .paso.saliendo{ transform: none; }
+}
+
+@media (max-height: 640px){
+  .paso{ gap: .7rem; padding-top: 2.4rem; padding-bottom: 3.2rem; }
+  .cuenta__bloque{ padding: .55rem .2rem; }
+  .ramo{ width: clamp(110px, 30vw, 180px); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Audio de fondo. Sin "autoplay": arranca con el botón del paso 1. -->
+<audio id="musica" src="musica.mp3" preload="auto"></audio>
+
+<!-- ============================================================
+     DEFINICIÓN DE LAS FLORES (SVG reutilizable, invisible)
+     Se dibuja una vez y se reutiliza con <use> en cada esquina.
+     ============================================================ -->
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <!-- Rosa: pétalos exteriores + espiral interior -->
+    <g id="rosa">
+      <g class="petalos">
+        <ellipse cx="0"   cy="-21" rx="15" ry="12"/>
+        <ellipse cx="20"  cy="-7"  rx="15" ry="12"/>
+        <ellipse cx="12"  cy="17"  rx="15" ry="12"/>
+        <ellipse cx="-12" cy="17"  rx="15" ry="12"/>
+        <ellipse cx="-20" cy="-7"  rx="15" ry="12"/>
+      </g>
+      <circle cx="0" cy="0" r="17" class="corazon"/>
+      <path d="M-9 3 A9 9 0 1 1 5 8 A5.5 5.5 0 1 0 -1 -2" fill="none" class="espiral" stroke-width="2" stroke-linecap="round"/>
+    </g>
+
+    <!-- Hoja -->
+    <path id="hoja" d="M0 0 C11 -19 30 -25 40 -23 C39 -9 24 6 0 0 Z"/>
+
+    <!-- Ramo completo: 3 rosas, hojas y bayas -->
+    <g id="ramo">
+      <!-- hojas del fondo -->
+      <use href="#hoja" fill="var(--salvia)"        transform="translate(96 26) rotate(18)"/>
+      <use href="#hoja" fill="var(--salvia-clara)"  transform="translate(112 62) rotate(58)"/>
+      <use href="#hoja" fill="var(--salvia)"        transform="translate(46 104) rotate(112)"/>
+      <use href="#hoja" fill="var(--salvia-clara)"  transform="translate(24 62) rotate(150)"/>
+      <use href="#hoja" fill="var(--salvia)"        transform="translate(60 12) rotate(-30)"/>
+      <use href="#hoja" fill="var(--salvia-clara)"  transform="translate(120 108) rotate(74)"/>
+
+      <!-- bayas -->
+      <g fill="var(--rosa-viejo)">
+        <circle cx="128" cy="34" r="4.5"/>
+        <circle cx="139" cy="46" r="3.6"/>
+        <circle cx="124" cy="52" r="3"/>
+        <circle cx="34"  cy="112" r="4.2"/>
+        <circle cx="22"  cy="100" r="3.2"/>
+      </g>
+
+      <!-- rosa vino grande -->
+      <g class="rosa-vino" transform="translate(58 54) scale(1.05)">
+        <use href="#rosa"/>
+      </g>
+      <!-- rosa marfil -->
+      <g class="rosa-marfil" transform="translate(108 76) scale(.82)">
+        <use href="#rosa"/>
+      </g>
+      <!-- rosa vino pequeña -->
+      <g class="rosa-vino" transform="translate(30 92) scale(.62)">
+        <use href="#rosa"/>
+      </g>
+    </g>
+  </defs>
+</svg>
+
+<!-- Estilos de color de las flores (fuera del bloque anterior por claridad) -->
+<style>
+  .rosa-vino   .petalos{ fill: var(--vino-claro); }
+  .rosa-vino   .corazon{ fill: var(--vino); }
+  .rosa-vino   .espiral{ stroke: rgba(255,240,235,.55); }
+
+  .rosa-marfil .petalos{ fill: #F6EEDC; }
+  .rosa-marfil .corazon{ fill: #FFFBF1; }
+  .rosa-marfil .espiral{ stroke: var(--oro); }
+</style>
+
+<main class="escenario" id="escenario" data-paso="1">
+
+  <!-- ---------- PASO 1 · PORTADA ---------- -->
+  <section class="paso portada activo" id="paso-1" aria-label="Portada">
+    <svg class="ramo ramo--sup" viewBox="0 0 170 140" aria-hidden="true"><use href="#ramo"/></svg>
+    <svg class="ramo ramo--inf" viewBox="0 0 170 140" aria-hidden="true"><use href="#ramo"/></svg>
+
+    <h1 class="portada__script">Nos casamos</h1>
+
+    <span class="filete" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-8-5.1-8-10.4A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 3.6C20 15.9 12 21 12 21z"/></svg>
+    </span>
+
+    <p class="portada__frase">
+      Desde hoy, cada camino que tomemos será uno solo. Gracias por acompañarnos al inicio de esta historia.
+    </p>
+
+    <p class="portada__fecha">21 · 11 · 2026</p>
+
+    <button class="boton boton--claro" id="abrir" type="button">Abrir invitación</button>
+  </section>
+
+  <!-- ---------- PASO 2 · CUENTA REGRESIVA ---------- -->
+  <section class="paso" id="paso-2" aria-label="Cuenta regresiva" aria-hidden="true">
+    <svg class="ramo ramo--sup" viewBox="0 0 170 140" aria-hidden="true"><use href="#ramo"/></svg>
+    <svg class="ramo ramo--inf" viewBox="0 0 170 140" aria-hidden="true"><use href="#ramo"/></svg>
+
+    <h1 class="titulo">Falta poco</h1>
+
+    <span class="filete" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-8-5.1-8-10.4A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 3.6C20 15.9 12 21 12 21z"/></svg>
+    </span>
+
+    <!-- Sin aria-live: un contador que se anuncia cada segundo
+         resulta insoportable con lector de pantalla. -->
+    <div class="cuenta" id="cuenta">
+      <div class="cuenta__bloque"><span class="cuenta__numero" id="dias">00</span><span class="cuenta__etiqueta">días</span></div>
+      <div class="cuenta__bloque"><span class="cuenta__numero" id="horas">00</span><span class="cuenta__etiqueta">horas</span></div>
+      <div class="cuenta__bloque"><span class="cuenta__numero" id="minutos">00</span><span class="cuenta__etiqueta">min</span></div>
+      <div class="cuenta__bloque"><span class="cuenta__numero" id="segundos">00</span><span class="cuenta__etiqueta">seg</span></div>
+    </div>
+
+    <p class="texto texto--tenue" id="mensaje-cuenta">Para el día en que diremos «sí».</p>
+
+    <div class="nav">
+      <button class="nav__enlace" type="button" data-ir="1">Atrás</button>
+      <button class="boton" type="button" data-ir="3">Siguiente</button>
+    </div>
+  </section>
+
+  <!-- ---------- PASO 3 · LUGAR Y FECHA ---------- -->
+  <section class="paso" id="paso-3" aria-label="Lugar y fecha" aria-hidden="true">
+    <svg class="ramo ramo--sup" viewBox="0 0 170 140" aria-hidden="true"><use href="#ramo"/></svg>
+    <svg class="ramo ramo--inf" viewBox="0 0 170 140" aria-hidden="true"><use href="#ramo"/></svg>
+
+    <h1 class="titulo">Dónde y cuándo</h1>
+
+    <span class="filete" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-8-5.1-8-10.4A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 3.6C20 15.9 12 21 12 21z"/></svg>
+    </span>
+
+    <div class="dato">
+      <span class="dato__valor dato__valor--grande">Iglesia Apostólica de Jesucristo</span>
+      <span class="dato__nota">Cra. 70c #65-63, Bogotá</span>
+    </div>
+
+    <div class="dato">
+      <span class="dato__valor">Sábado 21 de noviembre de 2026</span>
+      <span class="dato__valor">5:00 p. m.</span>
+    </div>
+
+    <a class="boton"
+       href="https://www.google.com/maps/search/?api=1&query=Iglesia%20Apost%C3%B3lica%20de%20Jesucristo%2C%20Cra.%2070c%20%2365-63%2C%20Bogot%C3%A1"
+       target="_blank" rel="noopener noreferrer">Ver en el mapa</a>
+
+    <div class="nav">
+      <button class="nav__enlace" type="button" data-ir="2">Atrás</button>
+      <button class="boton" type="button" data-ir="4">Siguiente</button>
+    </div>
+  </section>
+
+  <!-- ---------- PASO 4 · VESTIMENTA Y CONFIRMACIÓN ---------- -->
+  <section class="paso" id="paso-4" aria-label="Vestimenta y confirmación" aria-hidden="true">
+    <svg class="ramo ramo--sup" viewBox="0 0 170 140" aria-hidden="true"><use href="#ramo"/></svg>
+    <svg class="ramo ramo--inf" viewBox="0 0 170 140" aria-hidden="true"><use href="#ramo"/></svg>
+
+    <h1 class="titulo">Para acompañarnos</h1>
+
+    <span class="filete" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-8-5.1-8-10.4A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 3.6C20 15.9 12 21 12 21z"/></svg>
+    </span>
+
+    <div class="dato">
+      <span class="dato__nota">Código de vestimenta</span>
+      <span class="dato__valor dato__valor--grande">Formal / elegante</span>
+    </div>
+
+    <p class="texto">
+      Nos hará muy felices contar contigo. Por favor confirma tu asistencia antes del 16 de septiembre de 2026.
+    </p>
+
+    <p class="nota">
+      Al diligenciar el formulario, registra el nombre de todos tus acompañantes. Así podremos tener el conteo exacto de asistentes.
+    </p>
+
+    <a class="boton boton--solido"
+       href="https://docs.google.com/forms/d/e/1FAIpQLSfxNvw6r9Qw5DmA05Vt3YRMP55VCTju9qdCROsRTQRDVhGVVg/viewform"
+       target="_blank" rel="noopener noreferrer">Confirma tu asistencia</a>
+
+    <div class="nav">
+      <button class="nav__enlace" type="button" data-ir="3">Atrás</button>
+    </div>
+  </section>
+
+  <!-- Marco dorado e indicador de avance, comunes a todos los pasos -->
+  <div class="marco" aria-hidden="true"></div>
+
+  <div class="progreso" aria-hidden="true">
+    <span class="progreso__punto activo"></span>
+    <span class="progreso__punto"></span>
+    <span class="progreso__punto"></span>
+    <span class="progreso__punto"></span>
+  </div>
+
+  <!-- Botón flotante de audio, dentro de la tarjeta -->
+  <button class="audio-btn" id="audio-btn" type="button" aria-label="Pausar música" title="Pausar música">
+    <svg id="icono-audio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M11 5 6 9H3v6h3l5 4V5z"></path>
+      <path d="M15.5 8.5a5 5 0 0 1 0 7"></path>
+    </svg>
+  </button>
+</main>
+
+<script>
+/* ============================================================
+   LÓGICA
+   1) Navegación entre pasos (sin scroll)
+   2) Audio: arranca con el botón y se corta en 1:35
+   3) Cuenta regresiva
+   ============================================================ */
+(function () {
+  "use strict";
+
+  /* ---------- 1. NAVEGACIÓN ---------- */
+  const escenario  = document.getElementById("escenario");
+  const pasos      = Array.from(document.querySelectorAll(".paso"));
+  const puntos     = Array.from(document.querySelectorAll(".progreso__punto"));
+  let   pasoActual = 1;
+
+  function irA(numero) {
+    if (numero === pasoActual || numero < 1 || numero > pasos.length) return;
+
+    const saliente = pasos[pasoActual - 1];
+    const entrante = pasos[numero - 1];
+    const haciaAdelante = numero > pasoActual;
+
+    // El paso que sale se desvanece hacia arriba o hacia abajo según la dirección
+    saliente.classList.toggle("saliendo", haciaAdelante);
+    saliente.classList.remove("activo");
+    saliente.setAttribute("aria-hidden", "true");
+
+    entrante.classList.remove("saliendo");
+    entrante.classList.add("activo");
+    entrante.removeAttribute("aria-hidden");
+
+    puntos.forEach((p, i) => p.classList.toggle("activo", i === numero - 1));
+
+    pasoActual = numero;
+    escenario.dataset.paso = String(numero);
+
+    // Enfoca el primer elemento del nuevo paso (teclado y lector de pantalla)
+    const foco = entrante.querySelector("h1, button, a");
+    if (foco) foco.focus({ preventScroll: true });
+  }
+
+  document.querySelectorAll("[data-ir]").forEach(btn => {
+    btn.addEventListener("click", () => irA(Number(btn.dataset.ir)));
+  });
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight") irA(pasoActual + 1);
+    if (e.key === "ArrowLeft")  irA(pasoActual - 1);
+  });
+
+  /* ---------- 2. AUDIO ---------- */
+  const LIMITE     = 95;                       // 1:35 expresado en segundos
+  const musica     = document.getElementById("musica");
+  const botonAbrir = document.getElementById("abrir");
+  const botonAudio = document.getElementById("audio-btn");
+  const iconoAudio = document.getElementById("icono-audio");
+
+  const ICONO_SONANDO = '<path d="M11 5 6 9H3v6h3l5 4V5z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path>';
+  const ICONO_MUDO    = '<path d="M11 5 6 9H3v6h3l5 4V5z"></path><path d="m16 9 5 6"></path><path d="m21 9-5 6"></path>';
+
+  function pintarIcono(sonando) {
+    iconoAudio.innerHTML = sonando ? ICONO_SONANDO : ICONO_MUDO;
+    const etiqueta = sonando ? "Pausar música" : "Reproducir música";
+    botonAudio.setAttribute("aria-label", etiqueta);
+    botonAudio.title = etiqueta;
+  }
+
+  function reproducir() {
+    // Si ya llegó al corte, vuelve a empezar desde el segundo 0
+    if (musica.currentTime >= LIMITE - 0.05) musica.currentTime = 0;
+    const intento = musica.play();
+    if (intento && typeof intento.catch === "function") {
+      // Si el navegador bloquea el audio, la invitación funciona igual
+      intento.catch(() => pintarIcono(false));
+    }
+  }
+
+  // Este clic es la interacción que desbloquea el audio en el navegador
+  botonAbrir.addEventListener("click", () => {
+    musica.currentTime = 0;
+    reproducir();
+    botonAudio.classList.add("visible");
+    irA(2);
+  });
+
+  // Corte exacto en 1:35
+  musica.addEventListener("timeupdate", () => {
+    if (musica.currentTime >= LIMITE) {
+      musica.pause();
+      musica.currentTime = LIMITE;
+      pintarIcono(false);
+    }
+  });
+
+  musica.addEventListener("play",  () => pintarIcono(true));
+  musica.addEventListener("pause", () => pintarIcono(false));
+
+  botonAudio.addEventListener("click", () => {
+    musica.paused ? reproducir() : musica.pause();
+  });
+
+  /* ---------- 3. CUENTA REGRESIVA ---------- */
+  // 21 de noviembre de 2026, 5:00 p. m., hora de Colombia (UTC-5)
+  const BODA = new Date("2026-11-21T17:00:00-05:00").getTime();
+
+  const campos = {
+    dias:     document.getElementById("dias"),
+    horas:    document.getElementById("horas"),
+    minutos:  document.getElementById("minutos"),
+    segundos: document.getElementById("segundos")
+  };
+  const mensajeCuenta = document.getElementById("mensaje-cuenta");
+  const dosDigitos = n => String(n).padStart(2, "0");
+
+  function actualizarCuenta() {
+    const restante = BODA - Date.now();
+
+    if (restante <= 0) {
+      Object.values(campos).forEach(c => c.textContent = "00");
+      mensajeCuenta.textContent = "Hoy es el día. Te esperamos.";
+      clearInterval(reloj);
+      return;
+    }
+
+    const seg = Math.floor(restante / 1000);
+    campos.dias.textContent     = dosDigitos(Math.floor(seg / 86400));
+    campos.horas.textContent    = dosDigitos(Math.floor(seg / 3600) % 24);
+    campos.minutos.textContent  = dosDigitos(Math.floor(seg / 60) % 60);
+    campos.segundos.textContent = dosDigitos(seg % 60);
+  }
+
+  actualizarCuenta();
+  const reloj = setInterval(actualizarCuenta, 1000);
+})();
+</script>
+</body>
+</html>
